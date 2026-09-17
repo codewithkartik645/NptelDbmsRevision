@@ -4,7 +4,7 @@ export default function StatCard({ label, value, sub, accent }) {
       <p className="text-xs text-[var(--color-ink-soft)] dark:text-white/50">{label}</p>
       <p
         className={`font-mono-num mt-1 text-2xl font-semibold ${
-          accent ? "text-[var(--color-mark)]" : "text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
+          accent ? "text-[var(--color-mark-text)]" : "text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
         }`}
       >
         {value}

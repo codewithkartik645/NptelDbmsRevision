@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+/* Critical fix: Tailwind v4 defaults `dark:` utilities to the OS/browser
+   prefers-color-scheme media query, completely independent of any class we
+   toggle ourselves. Our in-app theme switch sets a `.dark` class on <html>,
+   so every `dark:` utility across the app must key off that class instead —
+   otherwise the app's theme silently fights the system theme (cards render
+   dark while the toggle says light, text goes invisible, etc). This line is
+   the standard Tailwind v4 way to opt into class-based dark mode. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --font-display: "Fraunces", ui-serif, Georgia, serif;
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
@@ -17,12 +26,24 @@
   --color-paper-dark: #e7e9f2;
   --color-rule-dark: #2c3253;
 
+  /* --color-mark is the vivid brand amber — used for fills, borders, chart
+     bars/lines, and highlight backgrounds, never as small text on its own.
+     --color-mark-text is a separate, contrast-checked amber for use AS text:
+     the vivid amber only reaches ~2.1:1 contrast against a white card (fails
+     WCAG AA), so text uses a deeper amber in light mode and a brighter one
+     in dark mode instead — each independently checked against its background
+     (~5:1 and ~9:1 respectively). */
   --color-mark: #e3a32b;
   --color-mark-soft: #fbecc9;
+  --color-mark-text: #b45309;
   --color-correct: #2f8f5b;
   --color-correct-soft: #dcf1e5;
   --color-wrong: #c33f2c;
   --color-wrong-soft: #f9e0da;
+}
+
+html.dark {
+  --color-mark-text: #fbbf24;
 }
 
 @layer base {

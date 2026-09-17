@@ -19,7 +19,7 @@ export default function ResultScreen({ attempt, session }) {
   return (
     <div className="mx-auto max-w-lg px-4 py-12 lg:px-8">
       <div className="rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-raised)] p-6 text-center dark:bg-[var(--color-panel-dark-raised)] dark:border-[var(--color-rule-dark)]">
-        <Trophy className="mx-auto mb-3 text-[var(--color-mark)]" size={32} />
+        <Trophy className="mx-auto mb-3 text-[var(--color-mark-text)]" size={32} />
         <p className="font-display text-xl text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
           {attempt.mode === "exam" ? "Exam complete" : "Practice complete!"}
         </p>

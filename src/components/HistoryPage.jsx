@@ -57,7 +57,7 @@ export default function HistoryPage() {
                   <td className="font-mono-num px-4 py-2 text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
                     {a.correct}/{a.total}
                   </td>
-                  <td className="font-mono-num px-4 py-2 text-[var(--color-mark)]">{a.accuracy}%</td>
+                  <td className="font-mono-num px-4 py-2 text-[var(--color-mark-text)]">{a.accuracy}%</td>
                 </tr>
               ))}
             </tbody>
