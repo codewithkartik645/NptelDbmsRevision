@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   History,
   X,
+  CheckSquare,
 } from "lucide-react";
 import { useNav } from "../context/NavContext.jsx";
 import { useAppData } from "../context/AppDataContext.jsx";
@@ -78,6 +79,9 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
         <div className="mb-4 space-y-0.5">
           <NavItem active={view === "setupRandom"} onClick={() => go("setupRandom")} icon={Shuffle}>
             Random practice
+          </NavItem>
+          <NavItem active={view === "setupCustomWeeks"} onClick={() => go("setupCustomWeeks")} icon={CheckSquare}>
+            Choose your weeks
           </NavItem>
           <NavItem active={view === "setupAllWeeks"} onClick={() => go("setupAllWeeks")} icon={Layers}>
             All 8 weeks

@@ -3,7 +3,7 @@ import { Play, Timer } from "lucide-react";
 import { useNav } from "../context/NavContext.jsx";
 import { shuffleArray, buildSession } from "../utils/shuffle.js";
 
-export default function SetupPractice({ title, description, pool, scope, counts, ensurePerWeekCoverage, weeks }) {
+export default function SetupPractice({ title, description, pool, scope, counts, ensurePerWeekCoverage, weeks, beforeCounts, emptyMessage }) {
   const { navigate } = useNav();
   const [selectedCount, setSelectedCount] = useState(counts[Math.floor(counts.length / 2)]);
   const [examMode, setExamMode] = useState(false);
@@ -45,6 +45,8 @@ export default function SetupPractice({ title, description, pool, scope, counts,
         {pool.length} questions available in this pool
       </p>
 
+      {beforeCounts}
+
       <div className="mt-6">
         <p className="mb-2 text-sm font-medium text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
           Number of questions
@@ -64,6 +66,9 @@ export default function SetupPractice({ title, description, pool, scope, counts,
             </button>
           ))}
         </div>
+        {pool.length === 0 && emptyMessage && (
+          <p className="mt-2 text-xs text-[var(--color-wrong)]">{emptyMessage}</p>
+        )}
       </div>
 
       <div className="mt-6 rounded-lg border border-[var(--color-rule)] bg-[var(--color-paper-raised)] p-4 dark:bg-[var(--color-panel-dark-raised)] dark:border-[var(--color-rule-dark)]">

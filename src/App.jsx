@@ -6,6 +6,7 @@ import Topbar from "./components/Topbar.jsx";
 import Dashboard from "./components/Dashboard.jsx";
 import WeekPage from "./components/WeekPage.jsx";
 import SetupPractice from "./components/SetupPractice.jsx";
+import CustomWeeksSetup from "./components/CustomWeeksSetup.jsx";
 import Practice from "./components/Practice.jsx";
 import ResultScreen from "./components/ResultScreen.jsx";
 import ReviewAnswers from "./components/ReviewAnswers.jsx";
@@ -42,6 +43,9 @@ export default function App() {
           counts={[5, 10, 20, "all"]}
         />
       );
+      break;
+    case "setupCustomWeeks":
+      content = <CustomWeeksSetup />;
       break;
     case "setupAllWeeks":
       content = (

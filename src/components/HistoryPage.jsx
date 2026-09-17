@@ -4,6 +4,11 @@ function scopeLabel(scope) {
   if (!scope) return "—";
   if (scope.type === "week") return `Week ${scope.week}`;
   if (scope.type === "random") return "Random";
+  if (scope.type === "custom") {
+    if (!scope.weeks || scope.weeks.length === 0) return "Custom weeks";
+    if (scope.weeks.length <= 3) return `Weeks ${scope.weeks.join(", ")}`;
+    return `${scope.weeks.length} chosen weeks`;
+  }
   if (scope.type === "allweeks") return "All weeks";
   if (scope.type === "final") return "Final exam";
   if (scope.type === "weak") return "Weak questions";
