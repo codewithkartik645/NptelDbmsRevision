@@ -15,7 +15,7 @@ function NavItem({ active, onClick, icon: Icon, children }) {
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2.5 rounded-md px-3 py-2 text-sm transition-colors text-left ${
+      className={`w-full flex items-center gap-2.5 rounded-md px-3 py-2.5 text-sm transition-colors text-left min-h-[40px] ${
         active
           ? "bg-[var(--color-mark-soft)] text-[var(--color-ink)] font-medium dark:bg-[var(--color-panel-dark-raised)] dark:text-[var(--color-paper-dark)]"
           : "text-[var(--color-ink-soft)] hover:bg-black/[0.03] dark:text-[color-mix(in_oklab,var(--color-paper-dark)_70%,transparent)] dark:hover:bg-white/[0.04]"
@@ -107,14 +107,14 @@ export default function Sidebar({ mobileOpen, onCloseMobile }) {
 
   return (
     <>
-      {/* Desktop sidebar */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-[var(--color-rule)] bg-[var(--color-paper-raised)] dark:bg-[var(--color-panel-dark)] dark:border-[var(--color-rule-dark)]">
+      {/* Desktop/tablet sidebar */}
+      <aside className="hidden md:block w-56 lg:w-64 shrink-0 border-r border-[var(--color-rule)] bg-[var(--color-paper-raised)] dark:bg-[var(--color-panel-dark)] dark:border-[var(--color-rule-dark)]">
         {content}
       </aside>
 
       {/* Mobile slide-over */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 lg:hidden">
+        <div className="fixed inset-0 z-40 md:hidden">
           <div className="absolute inset-0 bg-black/40" onClick={onCloseMobile} />
           <div className="absolute inset-y-0 left-0 w-72 max-w-[85vw] bg-[var(--color-paper-raised)] dark:bg-[var(--color-panel-dark)] shadow-xl">
             <button

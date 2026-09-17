@@ -9,7 +9,7 @@ export default function Topbar({ onOpenMobileMenu }) {
   return (
     <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[var(--color-rule)] bg-[var(--color-paper)]/90 backdrop-blur px-4 py-3 dark:bg-[var(--color-ink-dark)]/90 dark:border-[var(--color-rule-dark)]">
       <button
-        className="lg:hidden rounded-md p-1.5 text-[var(--color-ink-soft)] hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/10"
+        className="md:hidden rounded-md p-1.5 text-[var(--color-ink-soft)] hover:bg-black/5 dark:text-white/60 dark:hover:bg-white/10"
         onClick={onOpenMobileMenu}
         aria-label="Open menu"
       >

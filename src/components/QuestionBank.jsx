@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAppData } from "../context/AppDataContext.jsx";
 import { getQuestionStatus, STATUS_LABEL, accuracyOf } from "../utils/stats.js";
+import FormattedText from "./FormattedText.jsx";
 
 const STATUS_STYLES = {
   mastered: "bg-[var(--color-correct-soft)] text-[var(--color-correct)]",
@@ -50,9 +51,11 @@ export default function QuestionBank() {
                     return (
                       <div key={q.id} className="rounded-md bg-black/[0.02] px-3 py-2 dark:bg-white/[0.03]">
                         <div className="flex items-start justify-between gap-2">
-                          <p className="whitespace-pre-wrap text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
-                            Q{i + 1}. {q.question}
-                          </p>
+                          <FormattedText
+                            text={`Q${i + 1}. ${q.question}`}
+                            className="min-w-0 flex-1 text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
+                            tableClassName="bg-black/[0.04] dark:bg-white/[0.06] px-1.5 py-1"
+                          />
                           <span className={`shrink-0 rounded px-1.5 py-0.5 text-[11px] font-medium ${STATUS_STYLES[status]}`}>
                             {STATUS_LABEL[status]}
                           </span>

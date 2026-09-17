@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Search as SearchIcon } from "lucide-react";
 import { useAppData } from "../context/AppDataContext.jsx";
+import FormattedText from "./FormattedText.jsx";
 
 export default function SearchPage() {
   const { allQuestions } = useAppData();
@@ -44,9 +45,11 @@ export default function SearchPage() {
             className="rounded-md border border-[var(--color-rule)] bg-[var(--color-paper-raised)] px-3.5 py-2.5 dark:bg-[var(--color-panel-dark-raised)] dark:border-[var(--color-rule-dark)]"
           >
             <p className="font-mono-num text-xs text-[var(--color-ink-soft)] dark:text-white/40">Week {q.week}</p>
-            <p className="mt-0.5 whitespace-pre-wrap text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
-              {q.question}
-            </p>
+            <FormattedText
+              text={q.question}
+              className="mt-0.5 text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
+              tableClassName="bg-black/[0.04] dark:bg-white/[0.06] px-1.5 py-1"
+            />
           </div>
         ))}
       </div>

@@ -1,5 +1,6 @@
 import { Check, X, ArrowLeft } from "lucide-react";
 import { useNav } from "../context/NavContext.jsx";
+import FormattedText from "./FormattedText.jsx";
 
 export default function ReviewAnswers({ attempt, session }) {
   const { navigate } = useNav();
@@ -50,22 +51,30 @@ export default function ReviewAnswers({ attempt, session }) {
                   )}
                 </span>
               </div>
-              <p className="whitespace-pre-wrap text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
-                {q.question}
-              </p>
+              <FormattedText
+                text={q.question}
+                className="text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
+                tableClassName="bg-black/[0.03] dark:bg-white/[0.05] px-2 py-1.5"
+              />
               <div className="mt-3 space-y-1.5">
                 {q.options.map((opt) => {
                   const isSel = ans.selected.includes(opt);
                   const isCorrectOpt = q.correctAnswers.includes(opt);
-                  let cls = "border-[var(--color-rule)] dark:border-[var(--color-rule-dark)]";
-                  if (isCorrectOpt) cls = "border-[var(--color-correct)] bg-[var(--color-correct-soft)]";
-                  else if (isSel) cls = "border-[var(--color-wrong)] bg-[var(--color-wrong-soft)]";
+                  let cls = "border-[var(--color-rule)] dark:border-[var(--color-rule-dark)] text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]";
+                  let tableBg = "bg-black/[0.04] dark:bg-white/[0.06]";
+                  // correct-soft/wrong-soft are fixed light pastels in both
+                  // themes, so once applied, text must stay dark-ink (not
+                  // theme-adaptive) or it becomes invisible in dark mode.
+                  if (isCorrectOpt) {
+                    cls = "border-[var(--color-correct)] bg-[var(--color-correct-soft)] text-[var(--color-ink)]";
+                    tableBg = "bg-black/[0.06]";
+                  } else if (isSel) {
+                    cls = "border-[var(--color-wrong)] bg-[var(--color-wrong-soft)] text-[var(--color-ink)]";
+                    tableBg = "bg-black/[0.06]";
+                  }
                   return (
-                    <div
-                      key={opt}
-                      className={`whitespace-pre-wrap rounded-md border px-3 py-1.5 text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)] ${cls}`}
-                    >
-                      {opt}
+                    <div key={opt} className={`rounded-md border px-3 py-1.5 text-sm ${cls}`}>
+                      <FormattedText text={opt} tableClassName={`${tableBg} px-1.5 py-1`} />
                       {isSel && <span className="ml-1.5 text-xs opacity-60">(your answer)</span>}
                     </div>
                   );
