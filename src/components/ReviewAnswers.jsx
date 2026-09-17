@@ -88,6 +88,14 @@ export default function ReviewAnswers({ attempt, session }) {
                   <span className="whitespace-pre-wrap">{q.explanation}</span>
                 </p>
               )}
+              {q.hinglishExplanation && (
+                <p className="mt-2 rule-top pt-2 text-xs text-[var(--color-ink-soft)] dark:text-white/50">
+                  <span className="font-medium text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
+                    🇮🇳 Concept Hinglish mein:{" "}
+                  </span>
+                  <span className="whitespace-pre-wrap">{q.hinglishExplanation}</span>
+                </p>
+              )}
             </div>
           );
         })}

@@ -128,6 +128,14 @@ export default function QuestionCard({
                 <p className="whitespace-pre-wrap">{question.explanation}</p>
               </div>
             )}
+            {question.hinglishExplanation && (
+              <div className="mt-2 border-t border-black/10 pt-2 text-[var(--color-ink)]/70">
+                <p className="mb-0.5 flex items-center gap-1 font-medium text-[var(--color-ink)]">
+                  🇮🇳 Concept Hinglish mein
+                </p>
+                <p className="whitespace-pre-wrap">{question.hinglishExplanation}</p>
+              </div>
+            )}
           </div>
         )}
       </div>

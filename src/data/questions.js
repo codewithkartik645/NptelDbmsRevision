@@ -18,7 +18,8 @@
 //       question: "Question text. Use \n for line breaks (tables/schedules).",
 //       options: ["...", "...", "...", "..."],
 //       correctAnswers: ["...", ...],     // exact string(s) matching option(s)
-//       explanation: "optional"
+//       explanation: "optional",
+//       hinglishExplanation: "optional — Hindi+English mixed concept explainer"
 //     }
 //   ]
 // }
@@ -55,6 +56,8 @@ const rawWeeks = [
         correctAnswers: ["Logical level"],
         explanation:
           "There are three levels of abstraction. Physical level: the lowest level, describes how data is physically stored. Logical level: the middle level, describes which type of data is stored in the database. View level: the highest level, describes user interaction with the database system.",
+        hinglishExplanation:
+          "Yeh question DBMS ke 3 levels of abstraction ke baare mein hai. Physical level sabse niche hota hai — yaha data disk pe kaise store hota hai woh describe hota hai. Logical level middle mein hota hai — yaha yeh define hota hai ki database mein KAUN SI type ka data store hai (jaise tables, relationships). View level sabse upar hota hai — yeh define karta hai ki end-user database ko kaise dekhta/use karta hai. Question puch raha hai ki 'konsa type ka data store hai' yeh kaun describe karta hai — iska answer Logical level hai kyunki yeh 'data types' ko define karta hai, na ki physical storage ya user view ko.",
       },
       {
         id: "w1-q2",
@@ -65,6 +68,8 @@ const rawWeeks = [
         correctAnswers: ["student id, course id"],
         explanation:
           "A primary key must uniquely identify each record in a table. The combination of student_id and course_id uniquely identifies each tuple in the relation.",
+        hinglishExplanation:
+          "Question mein ek course_registration table diya hai jisme har row student aur unke course registration ko represent karta hai. Primary key woh column(s) hota hai jo har row ko UNIQUELY identify kare — matlab do rows kabhi same nahi honi chahiye us column mein. Yahan akela student_id repeat ho raha hai (101 do baar hai), aur akela course_id bhi repeat ho raha hai. Lekin jab hum student_id aur course_id dono ko combine karte hain, toh har combination unique ban jaata hai. Isliye composite key {student_id, course_id} hi sahi primary key hai.",
       },
       {
         id: "w1-q3",
@@ -78,6 +83,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["(5012, Ananya) is an instance of a relation schema."],
         explanation: "(5012, Ananya) is an instance of the schema Employee(empID, empName).",
+        hinglishExplanation:
+          "Yeh question 'schema' aur 'instance' ke difference ko test kar raha hai. Schema matlab table ki STRUCTURE/design — jaise Employee(empID, empName) yeh ek schema hai, jo bata raha hai ki table mein kaun kaun se columns hain. Instance matlab actual DATA jo us schema ke andar store hota hai — jaise (5012, Ananya) yeh ek particular row/record hai jo Employee schema follow karta hai. Isliye (5012, Ananya) ko 'instance of relation schema' kaha jaayega, na ki schema khud.",
       },
       {
         id: "w1-q4",
@@ -88,6 +95,8 @@ const rawWeeks = [
         correctAnswers: ["{ISBN}", "{Price, Category}"],
         explanation:
           "Minimal superkeys are candidate keys. ISBN alone is a superkey, so any superset of it is also a superkey, but only ISBN itself is minimal (a candidate key). Similarly, {Price, Category} is a superkey and is minimal, since removing either attribute breaks uniqueness — so it's also a candidate key.",
+        hinglishExplanation:
+          "Superkey woh set of attributes hota hai jo row ko uniquely identify kar sake — chahe usme extra unnecessary attributes bhi ho. Candidate key ek MINIMAL superkey hota hai — matlab agar usme se koi bhi attribute hata do toh woh unique identify karna band kar dega. {ISBN} akela superkey hai aur minimal bhi hai, isliye candidate key hai. {Price, Category} bhi ek superkey hai aur agar inme se ek bhi hata do toh unique nahi rahega, isliye yeh bhi minimal hai — candidate key hai. Lekin akela {Price} ya {Category} superkeys ki list mein diye hi nahi gaye the, isliye woh candidate keys nahi ho sakte.",
       },
       {
         id: "w1-q5",
@@ -103,6 +112,8 @@ const rawWeeks = [
         correctAnswers: ["Find the AID of all Article with more than 50 Citations and are of Tag 'AI'."],
         explanation:
           "The selection conditions are applied on both relations, then a join is performed, and finally a projection on AID is taken. So only articles satisfying both conditions (Citations > 50 and Tag = 'AI') are returned.",
+        hinglishExplanation:
+          "Yeh relational algebra expression do steps mein kaam karta hai: pehle dono relations pe SELECTION lagayi gayi hai (Article mein Citations>50 wale rows, aur ArticleTag mein Tag='AI' wale rows), fir dono ko JOIN kiya gaya hai (common AID pe match karna), aur last mein sirf AID column PROJECT kiya gaya hai. Toh jo bhi article dono conditions satisfy karta hai — Citations 50 se zyada AUR Tag 'AI' hai — uska hi AID final answer mein aayega. Isliye yeh 'AND' (dono condition) wala case hai, 'OR' wala nahi.",
       },
       {
         id: "w1-q6",
@@ -118,6 +129,8 @@ const rawWeeks = [
         correctAnswers: ["S1 is a Data Manipulation (DML) Query, and S2 is a Data Definition (DDL) Query"],
         explanation:
           "DDL (Data Definition Language) includes CREATE, DROP, ALTER, TRUNCATE, RENAME. DML (Data Manipulation Language) includes INSERT, UPDATE, DELETE.",
+        hinglishExplanation:
+          "SQL commands do main categories mein baante jaate hain: DDL (Data Definition Language) jo table ki STRUCTURE change karta hai — jaise CREATE, ALTER, DROP. DML (Data Manipulation Language) jo table ke andar ka DATA change karta hai — jaise INSERT, UPDATE, DELETE. S1 ek INSERT statement hai jo naya row daal raha hai, isliye yeh DML hai. S2 ek ALTER TABLE statement hai jo naya column add kar raha hai, matlab structure change ho raha hai, isliye yeh DDL hai.",
       },
       {
         id: "w1-q7",
@@ -133,6 +146,8 @@ const rawWeeks = [
         correctAnswers: ["d) AllocationID | DeptID | EmployeeName\nA001 | D101 | Amit\nA002 | D102 | Raj"],
         explanation:
           "Option (a) is invalid — DeptID 'D105' does not exist in Department. Option (b) is invalid — AllocationID 'A001' repeats, violating the primary key. Option (c) is invalid — a primary key value cannot be NULL. Option (d) is a valid instance.",
+        hinglishExplanation:
+          "Yeh question Foreign Key constraint ko test kar raha hai. Rule hota hai: jo value tum child table (EmployeeAllocation) mein daal rahe ho, woh parent table (Department) mein already exist honi chahiye. Option (a) galat hai kyunki D105 Department table mein hai hi nahi. Option (b) galat hai kyunki AllocationID (jo primary key hai) do baar A001 repeat ho raha hai — primary key kabhi duplicate nahi ho sakta. Option (c) galat hai kyunki primary key kabhi NULL nahi ho sakta. Sirf option (d) mein saari values valid hain.",
       },
       {
         id: "w1-q8",
@@ -147,6 +162,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["σ(Population≥50000)(RegionStats)"],
         explanation: "This selects all regions with population greater than or equal to 50000.",
+        hinglishExplanation:
+          "Yahan humein woh rows chahiye jinka Population 50000 ya usse zyada hai (Texas, California, Ontario, Florida — Quebec aur Bavaria exclude honge). Relational algebra mein 'σ' (sigma) SELECTION operator hota hai jo condition ke basis pe rows filter karta hai. Toh σ(Population≥50000) exactly wahi rows return karega jo humein chahiye — extra AND condition (jaise Country='Canada') lagane se sirf Canada wali rows aayengi jo galat hai.",
       },
       {
         id: "w1-q9",
@@ -161,6 +178,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["RegionStats1 ∩ RegionStats2"],
         explanation: "The result represents the intersection of RegionStats1 and RegionStats2.",
+        hinglishExplanation:
+          "Dono tables RegionStats1 aur RegionStats2 mein COMMON rows chahiye — jo dono mein hi present hon. Yeh exactly INTERSECTION (∩) ka kaam hai. Texas aur Ontario dono tables mein same values ke saath present hain, isliye yeh answer mein aayenge. Minus (−) operator sirf ek table mein present rows dega jo doosre mein nahi hain — jo humein nahi chahiye yahan.",
       },
       {
         id: "w1-q10",
@@ -176,6 +195,8 @@ const rawWeeks = [
         correctAnswers: ["c) Π(RegionName, Country)( σ(Population≥50000)(RegionStats) )"],
         explanation:
           "Option (c) first applies the selection σ(Population≥50000) to filter tuples, then projects RegionName and Country, matching the desired output. (Flagged: options a and d appear textually identical in the source PDF due to a symbol-extraction artifact — this doesn't affect the answer key, which is unambiguously option c.)",
+        hinglishExplanation:
+          "Yahan do steps chahiye: pehle SELECTION (σ) se sirf Population≥50000 wali rows filter karo, fir PROJECTION (Π) se sirf RegionName aur Country columns nikaalo. Agar sirf projection karoge (bina selection ke) toh saari rows aa jaayengi jo galat hai. Isliye sahi order hai: pehle filter, phir columns select.",
       },
     ],
   },
@@ -198,6 +219,8 @@ const rawWeeks = [
         correctAnswers: ["UPDATE CustomerOrders SET ItemCount=ItemCount-1 WHERE ItemCount>2;"],
         explanation:
           "To update existing values, SQL uses UPDATE ... SET ... WHERE .... Only this option correctly updates tuples where ItemCount > 2.",
+        hinglishExplanation:
+          "SQL mein existing data change karne ke liye UPDATE statement use hota hai, jiska syntax hai: UPDATE table SET column=value WHERE condition. 'MODIFY' aur 'ALTER' yeh dono commands table ki STRUCTURE change karne ke liye hote hain, DATA change karne ke liye nahi. Isliye sirf 'UPDATE ... SET ... WHERE' wala option hi syntactically correct hai jo ItemCount ko 1 kam karega jaha ItemCount already 2 se zyada hai.",
       },
       {
         id: "w2-q2",
@@ -215,6 +238,8 @@ const rawWeeks = [
         ],
         explanation:
           "EmpName alone can't be a key (Amit and Riya each repeat). DeptName alone can't be a key (HR, Sales repeat). (EmpName, City) isn't a key either — (Amit, Kolkata) repeats. But every (EmpName, DeptName) pair is unique, so it can be the primary key.",
+        hinglishExplanation:
+          "Table mein dekhne se pata chalta hai ki akela EmpName repeat ho raha hai (Amit do baar), akela DeptName bhi repeat ho raha hai (HR do baar). Lekin jab EmpName aur DeptName dono ko combine karte hain, har combination unique hai. Isliye composite primary key PRIMARY KEY(EmpName, DeptName) hi sahi hoga.",
       },
       {
         id: "w2-q3",
@@ -225,6 +250,8 @@ const rawWeeks = [
         correctAnswers: ["Fiction: 8, Science: 7"],
         explanation:
           "After the inner join on BookID and grouping by Category: Fiction rows have Quantity 5, 2, 1 (sum 8); Science has Quantity 7.",
+        hinglishExplanation:
+          "Yeh query pehle SalesRecords aur BookCatalog ko BookID pe JOIN karti hai, taaki har sale ke saath uski Category pata chal jaaye. Fir GROUP BY Category se sab Fiction wale rows ek group mein aur Science wale doosre group mein aa jaate hain, aur SUM(Quantity) se har group ki total quantity nikalti hai. Fiction ke rows hain 5,2,1 (total=8), Science ka ek row hai 7. Isliye final answer 'Fiction: 8, Science: 7' hai.",
       },
       {
         id: "w2-q4",
@@ -242,6 +269,8 @@ const rawWeeks = [
         ],
         explanation:
           "The correct syntax is: CREATE VIEW viewname AS SELECT column1, column2, ... FROM tablename WHERE condition;",
+        hinglishExplanation:
+          "VIEW ek 'virtual table' hota hai jo kisi query ke result ko represent karta hai. Uska syntax hota hai: CREATE VIEW viewname AS SELECT ... FROM ... WHERE .... Yaha humein sirf Electronics category ke Name aur Price chahiye, toh sahi syntax hoga: CREATE VIEW Electronics_Products AS SELECT Name, Price FROM InventoryDetails WHERE Category='Electronics'.",
       },
       {
         id: "w2-q5",
@@ -252,6 +281,8 @@ const rawWeeks = [
         correctAnswers: ["Bangalore"],
         explanation:
           "Location LIKE 'B%' matches locations starting with B: Bangalore, Bhopal. Location LIKE '%e' keeps only those ending in 'e'. Only Bangalore satisfies both.",
+        hinglishExplanation:
+          "'%' wildcard kisi bhi length ke characters ko represent karta hai. 'B%' ka matlab hai naam 'B' se start ho — Bangalore aur Bhopal dono match karte hain. '%e' ka matlab hai naam 'e' pe end ho. In dono conditions ko AND se combine karne par sirf woh naam bachega jo B se start AUR e se end ho. Bangalore isse match karta hai, lekin Bhopal 'l' pe end hota hai isliye match nahi karta.",
       },
       {
         id: "w2-q6",
@@ -267,6 +298,8 @@ const rawWeeks = [
         correctAnswers: ["PurchaseRecords NATURAL JOIN InventoryCatalog"],
         explanation:
           "A NATURAL JOIN combines tuples using attributes with the same name (here, ProductID) and keeps one copy of it. An EQUI JOIN also joins on equality but retains both compared attributes.",
+        hinglishExplanation:
+          "NATURAL JOIN automatically un columns pe match karta hai jinka NAAM same hota hai dono tables mein — yahan woh column hai ProductID. Yeh common column ka sirf ek copy result mein rakhta hai. EQUI JOIN bhi equality pe match karta hai lekin dono tables ke compared columns ko alag-alag rakhta hai (duplicate column aa sakta hai). Isliye NATURAL JOIN hi sahi answer hai.",
       },
       {
         id: "w2-q7",
@@ -281,6 +314,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["SELECT * FROM EmployeeDetails WHERE Salary>=60000 OR DeptName='Sales';"],
         explanation: "The output contains tuples where Salary ≥ 60000 OR DeptName = 'Sales'.",
+        hinglishExplanation:
+          "Output table mein Amit (Salary=60000), Sourav (70000), Neha (45000, Sales dept), aur Puja (60000) hain. Neha ki salary 60000 se kam hai lekin woh Sales department mein hai. Isliye yeh sirf 'Salary>=60000' condition se nahi aa sakti, aur sirf 'DeptName=Sales' se Amit/Puja miss ho jaayenge. Dono conditions ko OR se jodne par — jo bhi Salary>=60000 HO YA Sales department mein ho — dono set of rows mil jaate hain.",
       },
       {
         id: "w2-q8",
@@ -295,6 +330,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["SELECT avg(Salary) FROM EmployeeDetails WHERE DeptName='HR';"],
         explanation: "avg(Salary) computes the average; WHERE DeptName='HR' restricts it to the HR department.",
+        hinglishExplanation:
+          "AVG() ek aggregate function hai jo average nikalta hai. Humein sirf HR department ke employees ka average salary chahiye, poore table ka nahi. Isliye WHERE clause zaroori hai taaki sirf HR wale rows par calculation ho. Agar WHERE clause hata do toh poore table ka average aa jaayega jo galat hoga.",
       },
       {
         id: "w2-q9",
@@ -312,6 +349,8 @@ const rawWeeks = [
         ],
         explanation:
           "ALL returns TRUE only if the comparison holds for every value from the subquery. Option (a) is invalid since the subquery returns multiple rows. Option (c)'s ANY only checks at least one HR salary. Option (d)'s >= ALL would incorrectly include the salary equal to the highest HR salary.",
+        hinglishExplanation:
+          "'> ALL (subquery)' ka matlab hota hai — value subquery ke SAARE results se bada hona chahiye. Yahan humein aise employees chahiye jinki salary HR department ke SABSE bade salary se bhi zyada ho. '> ANY' sirf ek se bhi bada hone par match karta hai (weaker condition), jo galat hai. '>= ALL' galat hai kyunki woh HR ke maximum salary ke barabar wale ko bhi include kar lega, jabki humein STRICTLY zyada chahiye.",
       },
       {
         id: "w2-q10",
@@ -326,6 +365,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["CREATE INDEX idx_dept ON EmployeeDetails(DeptName);"],
         explanation: "The correct syntax is: CREATE INDEX index_name ON table_name(column_name);",
+        hinglishExplanation:
+          "Jab hum kisi column pe baar baar search karte hain (yaha DeptName), toh us column pe INDEX banane se searches fast ho jaati hain — jaise kisi kitaab ka index page. Syntax hota hai: CREATE INDEX index_name ON table_name(column_name).",
       },
     ],
   },
@@ -343,6 +384,8 @@ const rawWeeks = [
         correctAnswers: ["3"],
         explanation:
           "The division part produces the schools whose uniform colors are blue (2 tuples). Π(School)(σ(Color='White')Uniform) produces the school with white uniform (1 tuple). Union gives 3 tuples total.",
+        hinglishExplanation:
+          "Yeh ek complex relational algebra query hai jisme DIVISION (÷) aur UNION (∪) dono use ho rahe hain. Division operator un schools ko dhoondta hai jinke SAARE 'Blue' colors match karte hain (GlobalEd aur LPInternational) — yeh 2 tuples deta hai. Doosra part sirf White color wale school (EduSys) nikalta hai — yeh 1 tuple hai. In dono results ka UNION lene par total 3 unique tuples milte hain.",
       },
       {
         id: "w3-q2",
@@ -358,6 +401,8 @@ const rawWeeks = [
         correctAnswers: ["Creates(Tag, ID)\nHandicraft(Tag, Material)\nHandicraft_color(Tag, Color)"],
         explanation:
           "In a many-to-many relationship, Creates should have the primary keys of the participating entities. Since Color is multivalued, a separate schema Handicraft_color must be created.",
+        hinglishExplanation:
+          "Yeh ek Many-to-Many relationship ka case hai (Artisan multiple Handicraft banata hai, aur ek Handicraft multiple Artisans bana sakte hain). M:N relationship ko convert karne ke liye ek NAYI relation banani padti hai jisme dono entities ki primary keys ho — yaha Creates(Tag, ID). Color EK MULTIVALUED attribute hai, aur multivalued attributes ke liye ALAG SE ek relation banani padti hai — Handicraft_color(Tag, Color).",
       },
       {
         id: "w3-q3",
@@ -368,6 +413,8 @@ const rawWeeks = [
         correctAnswers: ["n[Personal] = 1", "n[Professional] = 1"],
         explanation:
           "Method 1 (each subtype gets only its key + extra attribute): Contact(Name, Number); Personal(Number, Social_site); Professional(Number, Email) → n[Personal]=n[Professional]=2.\nMethod 2 (each subtype inherits all superclass attributes too): Contact(Name, Number); Personal(Name, Number, Social_site); Professional(Name, Number, Email) → n[Contact]=2, n[Personal]=n[Professional]=3.\nIn both valid designs, n[Personal] and n[Professional] are always 2 or 3, never 1 — so (b) and (c) can NOT be true.",
+        hinglishExplanation:
+          "Yeh ER diagram mein ISA (specialization) hierarchy hai: Contact ek supertype hai jiske do subtypes hain — Personal aur Professional. ER ko relational schema mein convert karne ke do tareeke ho sakte hain: (1) sirf key + extra attribute rakho har subtype mein (2 attributes), ya (2) supertype ke SAARE attributes bhi copy kar do (3 attributes). In dono valid designs mein subtype ke attributes hamesha 2 ya 3 hi ho sakte hain — kabhi bhi sirf 1 nahi ho sakta.",
       },
       {
         id: "w3-q4",
@@ -386,6 +433,8 @@ const rawWeeks = [
         ],
         explanation:
           "Total participation is identified by a double line. The primary key of a many-to-many relation is composed of its participating entities' primary keys. The primary key of a weak entity set contains the primary key of its identifying entity set.",
+        hinglishExplanation:
+          "Yeh ER diagram mein Occupant ek WEAK ENTITY hai jo Room par depend karta hai. Weak entity ki primary key mein uski OWN partial key + identifying entity (Room) ki primary key dono hote hain — isliye Room_Occ ka primary key {RNo, OID} hoga. Diagram mein double line TOTAL participation dikhata hai aur single line PARTIAL participation — Room ka participation Room_Occ mein PARTIAL hai (Occupant ka total hai).",
       },
       {
         id: "w3-q5",
@@ -400,6 +449,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["{t | ∃p ∈ Singer (t[SID]=p[SID] ∧ p[Experience]>20)}"],
         explanation: "This is the correct Tuple Relational Calculus syntax and semantics for the given statement.",
+        hinglishExplanation:
+          "Tuple Relational Calculus mein hum yeh describe karte hain ki 'kaunse tuples chahiye' bina yeh bataye ki 'kaise nikalna hai'. Yahan humein Singer table se woh tuples chahiye jinka Experience 20 se zyada ho. Sahi syntax: {t | ∃p ∈ Singer (t[SID]=p[SID] ∧ p[Experience]>20)} — matlab 'woh tuple t jiske liye Singer table mein koi p exist kare jiska SID same ho AUR Experience 20 se zyada ho'.",
       },
       {
         id: "w3-q6",
@@ -414,6 +465,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["DOGS inherit the attributes of CARNIVORES and ANIMALS."],
         explanation: "According to the rule of specialization, a subtype inherits all attributes of its ancestor supertypes.",
+        hinglishExplanation:
+          "ER diagrams mein specialization hierarchy mein CHILD apne SAARE ANCESTORS (parents, grandparents) ke attributes INHERIT karta hai — reverse nahi hota. Yahan DOGS, CARNIVORES ka child hai, aur CARNIVORES, ANIMALS ka child hai. Isliye DOGS ko CARNIVORES ke attributes bhi milenge AUR ANIMALS ke attributes bhi milenge — dono.",
       },
       {
         id: "w3-q7",
@@ -424,6 +477,8 @@ const rawWeeks = [
         correctAnswers: ["Π(A)( σ(B=15)(r) )"],
         explanation:
           "The expression means: there exists a tuple (a,b) in r such that b = 15, and we project attribute a from tuples satisfying that condition — i.e., Π(A)(σ(B=15)(r)).",
+        hinglishExplanation:
+          "Yeh expression keh raha hai: 'wo saare a values do jinke liye koi b exist kare jaha (a,b) relation r mein ho AUR b ki value 15 ho'. Iska matlab hai: pehle r mein sirf woh rows filter karo jinka B=15 hai (SELECTION), fir sirf attribute A ko nikaalo (PROJECTION). Isliye sahi expression: Π(A)(σ(B=15)(r)).",
       },
       {
         id: "w3-q8",
@@ -441,6 +496,8 @@ const rawWeeks = [
         ],
         explanation:
           "The trigger fires automatically upon deletion of a Presenter from Presentation. For each deleted Presenter, it checks if Schedule has any remaining Topic and, if so, deletes those row(s) from Schedule.",
+        hinglishExplanation:
+          "Yeh ek AFTER DELETE trigger hai jo Presentation table pe lagi hai — matlab jab bhi Presentation se ek row DELETE hoti hai, yeh trigger AUTOMATICALLY chal jaata hai. Trigger check karta hai ki deleted Presenter se related koi Topic Schedule mein kisi doosre Presentation se connected hai ya nahi — agar nahi, toh us Topic ko bhi delete kar deta hai.",
       },
       {
         id: "w3-q9",
@@ -457,6 +514,8 @@ const rawWeeks = [
           "EXEC SQL DECLARE c CURSOR FOR SELECT ITEM FROM GROCERY WHERE PRICE > :monthly_budget AND MONTH = :target_month END_EXEC",
         ],
         explanation: "Variables declared in the host language must begin with ':' inside the embedded SQL query.",
+        hinglishExplanation:
+          "Embedded SQL (jab SQL ko kisi programming language ke andar likha jaata hai) mein, jo bhi variable HOST LANGUAGE mein declare kiya gaya hai, use SQL statement ke andar refer karte waqt uske pehle COLON (:) lagana zaroori hota hai. Yahan monthly_budget aur target_month dono host language variables hain, isliye dono ke pehle ':' hona chahiye.",
       },
       {
         id: "w3-q10",
@@ -467,6 +526,8 @@ const rawWeeks = [
         correctAnswers: ["The Miliputs", "Pancham"],
         explanation:
           "Π(CName)(σ(HallNo>2 ∧ Genres='Folk')(Concerts)) produces The Miliputs, Pancham. Both of those are also Recorded events, so the intersection keeps The Miliputs and Pancham.",
+        hinglishExplanation:
+          "Pehle part mein hum woh concerts dhoondte hain jinka HallNo 2 se zyada hai AUR Genre 'Folk' hai — yeh The Miliputs aur Pancham dete hain. Doosre part mein hum woh concerts dhoondte hain jo 'Recorded' event hain. Dono results ka INTERSECTION lene par The Miliputs aur Pancham dono Recorded bhi hain, isliye yeh dono final answer mein aate hain.",
       },
     ],
   },
@@ -484,6 +545,8 @@ const rawWeeks = [
         correctAnswers: ["Augmentation"],
         explanation:
           "According to the Augmentation rule, if X determines Y, then XZ determines YZ, which can be decomposed to XZ determines Y.",
+        hinglishExplanation:
+          "Functional Dependency rules mein AUGMENTATION rule kehta hai: agar X → Y hai, toh XZ → YZ bhi hoga (kisi bhi extra attribute Z ko dono side add kar sakte hain). Yahan ConfID → Subject hai; ConfLink (Z) add karne par {ConfID,ConfLink} → {Subject,ConfLink} milega, jise decompose karke {ConfID,ConfLink} → Subject nikal sakte hain.",
       },
       {
         id: "w4-q2",
@@ -499,6 +562,8 @@ const rawWeeks = [
         correctAnswers: ["{MarketName, Product} → Stock"],
         explanation:
           "Only for {MarketName, Product} → Stock do the attributes on the L.H.S uniquely identify the attribute on the R.H.S in this instance.",
+        hinglishExplanation:
+          "Functional dependency check karne ke liye humein dekhna hota hai ki L.H.S ki values UNIQUE ho toh R.H.S bhi HAMESHA unique nikle. Yahan {MarketName, Product} combination har row mein UNIQUE hai, aur uske corresponding Stock bhi consistent hai. 'MarketName → Product,Stock' fail hota hai kyunki SpendWise ke multiple products hain.",
       },
       {
         id: "w4-q3",
@@ -514,6 +579,8 @@ const rawWeeks = [
         correctAnswers: ["Smart phone is not normalized"],
         explanation:
           "The canonical cover is FD1 and FD2 (which covers FD3), and model is the key. So Smartphone is in BCNF, which also means it's in 1NF, 2NF, and 3NF. In FD3, the non-prime attribute is dependent on a super key, with no transitive dependency or composite key issue.",
+        hinglishExplanation:
+          "Pehle canonical cover nikalna padta hai — FD3 FD1 aur FD2 se hi derive ho jaata hai, isliye redundant hai. Baaki FD1/FD2 mein 'model' hi key hai (single attribute key), isliye partial/transitive dependency ho hi nahi sakti. Isliye relation BCNF mein hai, jo automatically 1NF/2NF/3NF mein bhi hota hai — 'not normalized' wala statement galat hai.",
       },
       {
         id: "w4-q4",
@@ -529,6 +596,8 @@ const rawWeeks = [
         correctAnswers: ["{ConfID,Admin} → {ConfLink,Subject}\nConfLink → Participants"],
         explanation:
           "For option (a), the candidate key is {ConfID, Admin}; a partial dependency is present, so it's only in 1NF. For option (b), the candidate keys {ConfID,ConfLink} and {Admin,Subject} appear on the LHS of both FDs, keeping it in BCNF. For option (c), there's neither partial nor transitive dependency, so it's in 3NF. For option (d), the candidate key is {ConfID, Admin}, there's no partial dependency, but there IS a transitive dependency — so it's in 2NF but not 3NF.",
+        hinglishExplanation:
+          "2NF ka matlab hai: koi PARTIAL dependency nahi honi chahiye. 3NF ka matlab hai: koi TRANSITIVE dependency bhi nahi honi chahiye. Option (d) mein candidate key {ConfID,Admin} hai — partial dependency nahi hai, lekin ConfLink → Participants ek transitive dependency create karta hai. Isliye yeh 2NF mein hai lekin 3NF mein nahi.",
       },
       {
         id: "w4-q5",
@@ -539,6 +608,8 @@ const rawWeeks = [
         correctAnswers: ["X=dataform, i=2", "X=device, i=2"],
         explanation:
           "The 3 candidate keys are K1={device, sensor}, K2={dataform, sensor}, K3={dataform, delay, status}, so K1∩K2=sensor. For sensor to become a candidate key, either device or dataform must be appended to the R.H.S of FD2.",
+        hinglishExplanation:
+          "Yahan 3 candidate keys hain: K1={device,sensor}, K2={dataform,sensor}, K3={dataform,delay,status}. K1 aur K2 ka common part hai 'sensor'. Sirf K3 aur 'sensor' ko candidate key banane ke liye FD2 (sensor → delay,status) ke RHS mein 'device' ya 'dataform' add karna padega, taaki sensor ka closure poori relation cover kar sake.",
       },
       {
         id: "w4-q6",
@@ -554,6 +625,8 @@ const rawWeeks = [
         correctAnswers: ["C2 covers C1 but C1 does not cover C2"],
         explanation:
           "Vehicle → {Color, Capacity} from C2 cannot be derived from C1, since (Vehicle)+ doesn't contain {Color, Capacity} under C1. But all FDs of C1 can be derived from C2.",
+        hinglishExplanation:
+          "Ek FD set doosre ko 'cover' karta hai agar uske saare FDs doosre set se DERIVE ho sakein. C2 ka FD 'Vehicle → {Color,Capacity}' C1 se derive nahi ho sakta. Lekin C1 ke saare FDs C2 se easily derive ho jaate hain. Isliye C2, C1 ko cover karta hai, lekin C1, C2 ko cover nahi karta.",
       },
       {
         id: "w4-q7",
@@ -563,6 +636,8 @@ const rawWeeks = [
         options: ["(n, m, q, p, g)", "(n, q, p, g)", "(n, o, p, q)", "(n, q, g, o)"],
         correctAnswers: ["(n, q, p, g)"],
         explanation: "(n)+ = (n, q) [since n→q] = (n, q, p) [since q→p] = (n, q, p, g) [since np→g].",
+        hinglishExplanation:
+          "Attribute closure (n)+ nikalne ke liye hum step by step FDs apply karte hain jab tak koi naya attribute na mile. {n} → 'n→q' se {n,q} → 'q→p' se {n,q,p} → 'np→g' se {n,q,p,g}. Ab koi aur FD apply nahi ho sakti, isliye final closure hai (n,q,p,g).",
       },
       {
         id: "w4-q8",
@@ -578,6 +653,8 @@ const rawWeeks = [
         correctAnswers: ["{sensor, device, status} → {dataform, uprange, lowrange}"],
         explanation:
           "The closure of {sensor, device} still includes status, so status is extraneous on the L.H.S of the first FD. No other attribute can be removed elsewhere, so this exact FD is not present in the canonical cover.",
+        hinglishExplanation:
+          "Canonical cover banate waqt hum check karte hain ki kisi FD ke L.H.S mein koi EXTRANEOUS (unnecessary) attribute toh nahi hai. Yahan sirf {sensor,device} ka closure nikalne par bhi 'status' automatically mil jaata hai (sensor→status FD2 se), matlab 'status' extraneous hai. Isliye is EXACT FD ka full version canonical cover mein nahi rahega.",
       },
       {
         id: "w4-q9",
@@ -593,6 +670,8 @@ const rawWeeks = [
         correctAnswers: ["Lossless but not dependency preserving."],
         explanation:
           "The common attributes {ConfID, Admin} are a key in VirtualConf1, so the decomposition is lossless. FD1 and FD2 derive from VirtualConf1, FD3 from VirtualConf2, but FD4 cannot be derived — violating dependency preservation.",
+        hinglishExplanation:
+          "LOSSLESS decomposition check karne ke liye dekho ki common attributes (ConfID, Admin) kisi ek decomposed relation mein CANDIDATE KEY hain — VirtualConf1 mein hain, isliye lossless hai. DEPENDENCY PRESERVING check karo ki saare FDs kisi relation se derive ho sakein — FD4 kisi se derive nahi ho pa raha, isliye dependency preserving NAHI hai.",
       },
       {
         id: "w4-q10",
@@ -603,6 +682,8 @@ const rawWeeks = [
         correctAnswers: ["Pname →→ Hobby", "Pname →→ Language"],
         explanation:
           "Since hobbies and languages are independent of each other for a given person, both are multivalued dependencies (MVDs) on Pname alone: Pname →→ Hobby and Pname →→ Language.",
+        hinglishExplanation:
+          "Multivalued Dependency (MVD, →→) tab hota hai jab ek attribute ke multiple independent values ho sakte hain, doosre multivalued attribute se independent. Ek Person ke multiple Hobbies (independent of Language) aur multiple Languages (independent of Hobby) ho sakte hain. Isliye do separate MVDs: Pname →→ Hobby aur Pname →→ Language.",
       },
     ],
   },
@@ -625,6 +706,8 @@ const rawWeeks = [
         correctAnswers: ["The second part 'onlinecourses.nptel.ac.in' is called the domain name."],
         explanation:
           "The first part of a URL indicates the access protocol; the second part gives the unique machine name (domain name); the rest of the URL identifies the document within that machine.",
+        hinglishExplanation:
+          "Ek URL ke parts hote hain: pehla part (https) PROTOCOL batata hai. Doosra part (onlinecourses.nptel.ac.in) DOMAIN NAME hai — machine ka unique address. Baaki bacha hua part document ki LOCATION batata hai us machine ke andar. Isliye 'domain name' wala statement hi sahi hai.",
       },
       {
         id: "w5-q2",
@@ -638,6 +721,8 @@ const rawWeeks = [
         ],
         correctAnswers: ["REST is a type of Web Service.", "XML data format is traditionally associated with Big Web Services."],
         explanation: "REST is indeed a type of web service, and XML is traditionally associated with Big Web Services.",
+        hinglishExplanation:
+          "REST ek architecture style hai jo Web Services banane ke liye use hota hai — isliye 'REST is a type of Web Service' sahi hai. XML historically 'Big Web Services' ke saath associate kiya jaata hai data-format ke roop mein. REST actually JSON ke saath bahut achhe se kaam karta hai (yeh statement galat hai), aur RPC bhi Web pe possible hai (yeh bhi galat statement hai).",
       },
       {
         id: "w5-q3",
@@ -655,6 +740,8 @@ const rawWeeks = [
         ],
         explanation:
           "MTTF is the average (not maximum) time a disk can run without failure. And connecting many disks by high-speed network to servers is called Storage Area Networks, not Network Area Storage. The other two statements are correct.",
+        hinglishExplanation:
+          "MTTF (Mean Time To Failure) ka matlab AVERAGE time hota hai — 'maximum' nahi. Jab bahut saari disks high-speed network se servers se connect ki jaati hain, use 'Storage Area Network (SAN)' kehte hain, 'Network Area Storage' nahi — naam hi galat hai. Baaki dono statements sahi hain.",
       },
       {
         id: "w5-q4",
@@ -665,6 +752,8 @@ const rawWeeks = [
         correctAnswers: ["4 KB"],
         explanation:
           "Capacity = surfaces × tracks/surface × sectors/track × bytes/sector. Sector size = (512×2^30) / (256×1024×512) bytes = 2^12 bytes = 4 KB.",
+        hinglishExplanation:
+          "Total disk capacity = surfaces × tracks × sectors × bytes-per-sector. Sector size nikalne ke liye formula rearrange karo: (512×2^30) ÷ (256×1024×512) bytes = 2^12 bytes = 4096 bytes = 4 KB.",
       },
       {
         id: "w5-q5",
@@ -674,6 +763,8 @@ const rawWeeks = [
         options: ["16 TB", "8 TB", "4 TB", "2 TB"],
         correctAnswers: ["8 TB"],
         explanation: "RAID 1 mirrors data. Usable capacity = (8 × 2 TB) ÷ 2 = 8 TB.",
+        hinglishExplanation:
+          "RAID Level 1 'mirroring' karta hai — har disk ka ek EXACT COPY doosri disk pe hota hai. Iska matlab total 8 disks mein se sirf AADHI capacity USABLE hoti hai. Total = 8×2TB = 16TB, usable = 16TB÷2 = 8TB.",
       },
       {
         id: "w5-q6",
@@ -683,6 +774,8 @@ const rawWeeks = [
         options: ["96.77%", "96.02%", "58.14%", "30.25%"],
         correctAnswers: ["96.77%"],
         explanation: "Availability = MTBF / (MTBF + MTTR) = (25×24) / (25×24 + 20) = 600/620 ≈ 96.77%.",
+        hinglishExplanation:
+          "Availability formula: MTBF ÷ (MTBF + MTTR). MTBF ko ghante mein convert karo: 25×24=600 ghante. Formula: 600÷(600+20) = 600÷620 ≈ 96.77%.",
       },
       {
         id: "w5-q7",
@@ -701,6 +794,8 @@ const rawWeeks = [
         ],
         explanation:
           "The ER diagram shows a one-to-many relationship between Group and Participant, not many-to-many. GName is the primary key of Group, so it CAN be the foreign key of Participate. So statements (a) and (c) are the incorrect ones.",
+        hinglishExplanation:
+          "Diagram mein '1' aur 'n' likha hai — EK Group mein MULTIPLE Participants ho sakte hain, lekin EK Participant sirf EK Group mein. Yeh ONE-TO-MANY hai, MANY-TO-MANY nahi. GName primary key hai, aur primary key hamesha kisi related table mein FOREIGN KEY ban sakti hai — isliye 'no primary key' wala statement bhi galat hai.",
       },
       {
         id: "w5-q8",
@@ -716,6 +811,8 @@ const rawWeeks = [
         correctAnswers: ["Painter(pNo, painter, materials)\nDrawingCompetition(paintId, pNo, topic, pName, year)"],
         explanation:
           "In options (a), (b), and (c), there are no common attributes between Painter and DrawingCompetition to rejoin them into the original table. Option (d) preserves pNo as the common attribute.",
+        hinglishExplanation:
+          "Schema refinement mein decomposed relations ko wapas JOIN karke original relation banane ke liye dono relations mein kam se kam EK COMMON attribute hona chahiye. Options (a),(b),(c) mein Painter aur DrawingCompetition ke beech koi common attribute nahi bacha. Sirf option (d) mein 'pNo' common attribute hai.",
       },
       {
         id: "w5-q9",
@@ -726,6 +823,8 @@ const rawWeeks = [
         correctAnswers: ["17 11 12"],
         explanation:
           "Tracing LRU replacement through the sequence up to block 11 gives buffer contents 17, 11, 12 (9 was least recently used and gets replaced by 11).",
+        hinglishExplanation:
+          "LRU (Least Recently Used) mein jab buffer full ho, SABSE PURANE (jo sabse lambe time se use nahi hua) block ko replace karte hain. Sequence trace karne par, jab block '11' aata hai, buffer mein 17,9,12 the aur '9' sabse kam recently use hua tha, toh usse replace kiya. Final: 17, 11, 12.",
       },
       {
         id: "w5-q10",
@@ -735,6 +834,8 @@ const rawWeeks = [
         options: ["14", "16", "17", "18"],
         correctAnswers: ["16"],
         explanation: "Available space = 512 − 18 = 494 bytes. Since records can't cross block boundaries: 494 ÷ 30 = 16 records.",
+        hinglishExplanation:
+          "Har block mein kuch space POINTER ke liye reserved hota hai. Available space = 512−18 = 494 bytes. 494÷30 = 16.46, aur records BLOCK BOUNDARY cross nahi kar sakte, isliye sirf POORA number lenge — 16 records.",
       },
     ],
   },
@@ -752,6 +853,8 @@ const rawWeeks = [
         correctAnswers: ["Secondary indexing"],
         explanation:
           "The file is physically sorted by IMEI, not by model. Since model is a non-ordering attribute frequently searched on, a secondary index speeds up these searches (pointing to all matching records since multiple IMEIs can share a model).",
+        hinglishExplanation:
+          "File already IMEI (primary/ordering attribute) ke hisaab se sorted hai. Users 'model' se search karte hain, jo NON-ORDERING attribute hai. Jab bhi hum kisi non-ordering attribute pe fast search chahte hain, hum uspe SECONDARY INDEX banate hain.",
       },
       {
         id: "w6-q2",
@@ -769,6 +872,8 @@ const rawWeeks = [
         ],
         explanation:
           "In a B-Tree, keys and records are stored in both internal and leaf nodes. In a B+ Tree, internal nodes store only keys while all records are in the leaf nodes, which are linked — making sequential access faster than in a B-Tree, whose leaf nodes are not typically linked.",
+        hinglishExplanation:
+          "B-Tree mein DATA internal nodes AUR leaf nodes dono mein store hota hai. B+ Tree mein sirf KEYS internal nodes mein, SAARE records sirf LEAF nodes mein. B+ Tree ke leaf nodes ek doosre se LINKED hote hain, isliye SEQUENTIAL access FAST hota hai. B-Tree mein aisi linking nahi hoti, isliye SLOWER hota hai.",
       },
       {
         id: "w6-q3",
@@ -779,6 +884,8 @@ const rawWeeks = [
         correctAnswers: ["480"],
         explanation:
           "Number of data blocks = 12000 / 50 = 240. A sparse index with 2 entries per data block needs 2 × 240 = 480 index entries.",
+        hinglishExplanation:
+          "Total DATA BLOCKS = 12000÷50 = 240 blocks. Sparse index mein har data block ke liye SIRF DO entries hoti hain. Total index entries = 240×2 = 480.",
       },
       {
         id: "w6-q4",
@@ -789,6 +896,8 @@ const rawWeeks = [
         correctAnswers: ["2"],
         explanation:
           "The final 2-3-4 tree has root [38], children [24] and [51 59], and leaves [11], [31], [45], [52], [66 73]. There are two 3-nodes (nodes with 2 keys): [51 59] and [66 73].",
+        hinglishExplanation:
+          "2-3-4 tree mein har node mein 1, 2, ya 3 keys ho sakti hain. Keys insert karne par final tree banta hai jisme sirf do nodes hain jinme 2 KEYS hain (3-nodes): [51,59] aur [66,73]. Isliye answer 2 hai.",
       },
       {
         id: "w6-q5",
@@ -799,6 +908,8 @@ const rawWeeks = [
         correctAnswers: ["280"],
         explanation:
           "Blocks for the data file = 1200/6 = 200. Blocks for a dense record index = 1200/15 = 80. Total = 200 + 80 = 280 blocks.",
+        hinglishExplanation:
+          "Data file ke liye blocks = 1200÷6 = 200. Dense index file ke liye blocks = 1200÷15 = 80. Total blocks = 200+80 = 280.",
       },
       {
         id: "w6-q6",
@@ -809,6 +920,8 @@ const rawWeeks = [
         correctAnswers: ["4"],
         explanation:
           "Search for 'M': Start at [J]. M > J → go right to [N T]. M < N → go left to [K L]. M > K → compare with L; M > L → not found (leaf, no further child). That's 4 comparisons total.",
+        hinglishExplanation:
+          "2-3-4 tree mein search karte waqt root se compare karte hue niche jaate hain. 'M' ke liye: root [J] se M>J (right jao [N,T]), M<N (left jao [K,L]), M>K, fir M>L (leaf hai, aage koi child nahi) — 'M' nahi mila. Total comparisons: J,N,K,L = 4.",
       },
       {
         id: "w6-q7",
@@ -818,6 +931,8 @@ const rawWeeks = [
         options: ["19", "43", "75", "94"],
         correctAnswers: ["43"],
         explanation: "H(21375) = (21375 ÷ 11) % 100 = 1943 % 100 = 43.",
+        hinglishExplanation:
+          "Hash function: H(key)=(key÷11)%100. k=21375: 21375÷11=1943 (integer division), fir 1943%100=43 (modulo se remainder).",
       },
       {
         id: "w6-q8",
@@ -828,6 +943,8 @@ const rawWeeks = [
         correctAnswers: ["16"],
         explanation:
           "A bitmap index on N rows with m distinct values has N×m bits. Size = 1 KB = 1024×8 bits. Number of types = (1024×8)/512 = 16.",
+        hinglishExplanation:
+          "Bitmap index mein N rows aur m distinct values ke liye total bits = N×m. Index size=1KB=8192 bits, N=512. m = 8192÷512 = 16 different types.",
       },
       {
         id: "w6-q9",
@@ -838,6 +955,8 @@ const rawWeeks = [
         correctAnswers: ["1024 bytes"],
         explanation:
           "Block Size = (m × pointer size) + ((m-1) × key size) = (57×8) + (56×10) = 456 + 560 = 1016 bytes ≈ 1024 bytes (rounded up to a power of 2).",
+        hinglishExplanation:
+          "B+ tree internal node mein 'm' pointers aur 'm-1' keys hoti hain. Block Size = (m×pointer size)+((m-1)×key size) = (57×8)+(56×10) = 456+560 = 1016 bytes. Block sizes hamesha 2 ki POWER mein hoti hain, agla valid size 1024 bytes hai.",
       },
       {
         id: "w6-q10",
@@ -853,6 +972,8 @@ const rawWeeks = [
         correctAnswers: ["A1 is a bitmap index for Age below 40.", "A2 is a bitmap index for Age 40 to below 60."],
         explanation:
           "Mapping the actual ages to true/false against each claimed range shows A1 does not correctly represent 'Age below 40' and A2 does not correctly represent 'Age 40 to below 60'. The other two options are correct.",
+        hinglishExplanation:
+          "Har customer ki actual age ko bitmap ke 1s/0s se match karke check karte hain ki claimed range sahi hai ya nahi. Actual ages dekhne par pata chalta hai A1 'Age below 40' ko sahi represent nahi karta, aur A2 'Age 40-60' ko bhi sahi represent nahi karta — dono galat hain.",
       },
     ],
   },
@@ -875,6 +996,8 @@ const rawWeeks = [
         correctAnswers: ["The schedule is both view and conflict serializable schedule."],
         explanation:
           "The precedence graph of the transactions has no cycle, so the schedule is conflict serializable. All conflict serializable schedules are also view serializable.",
+        hinglishExplanation:
+          "Serializability check karne ke liye PRECEDENCE GRAPH banate hain — agar Ti kisi shared item pe Tj se pehle conflict-operation karta hai, toh Ti→Tj edge banti hai. Agar graph mein CYCLE nahi hai, schedule CONFLICT SERIALIZABLE hai, aur har conflict serializable schedule VIEW SERIALIZABLE bhi hota hai. Yahan graph mein cycle nahi hai, isliye dono hai.",
       },
       {
         id: "w7-q2",
@@ -885,6 +1008,8 @@ const rawWeeks = [
         correctAnswers: ["3"],
         explanation:
           "The precedence graph gives edges T4→T1, T1→T2, T1→T3, T1→T5, T2→T3, which is acyclic (conflict serializable). The possible topological orderings are: T4→T1→T2→T3→T5, T4→T1→T2→T5→T3, T4→T1→T5→T2→T3 — 3 total.",
+        hinglishExplanation:
+          "Precedence graph banane ke baad, uske SAARE POSSIBLE TOPOLOGICAL ORDERINGS count karne hain — har ordering ek alag equivalent serial schedule hai. Edges: T4→T1, T1→T2, T1→T3, T1→T5, T2→T3 — is graph ke exactly 3 valid topological orderings possible hain.",
       },
       {
         id: "w7-q3",
@@ -900,6 +1025,8 @@ const rawWeeks = [
         correctAnswers: ["c) T1→T3, T1→T4, T2→T3, T3→T4"],
         explanation:
           "When Ti requests a data item held by Tj, the edge Ti → Tj is inserted in the wait-for graph. So T1→T3, T1→T4 (T1 waits for both T3 and T4), T2→T3 (T2 waits for T3), and T3→T4 (T3 waits for T4) correctly represent the given waiting relationships.",
+        hinglishExplanation:
+          "Wait-for graph mein, jab Ti kisi data item ka wait kar raha ho jo Tj ke paas hai, hum edge Ti→Tj banate hain. Yahan T1, T3 aur T4 dono ka wait kar raha hai, T2, T3 ka wait kar raha hai, aur T3, T4 ka wait kar raha hai — in sabko sahi direction mein draw karne se sahi graph banta hai.",
       },
       {
         id: "w7-q4",
@@ -915,6 +1042,8 @@ const rawWeeks = [
         correctAnswers: ["Both T1 followed by T2 and T2 followed by T1"],
         explanation:
           "Both orderings (T1→T2 and T2→T1) independently produce the same final state: A=500, B=900, D=400, since T1 and T2's effects on A are additive regardless of order, and they touch different other variables (B vs D).",
+        hinglishExplanation:
+          "T1 sirf A aur B ko touch karta hai, T2 sirf A aur D ko touch karta hai — sirf A common hai. Dono transactions A mein sirf SUBTRACT kar rahe hain (additive operation), toh order matter nahi karta — 1000-400-100=500 chahe kisi bhi order mein ho. Isliye dono orderings same result denge.",
       },
       {
         id: "w7-q5",
@@ -930,6 +1059,8 @@ const rawWeeks = [
         correctAnswers: ["T1 holds an S lock on A, and T2 requests an S lock on A."],
         explanation:
           "Two transactions can simultaneously hold shared (S) locks on the same item. An exclusive (X) lock is incompatible with any other lock. Only option (a) is granted immediately.",
+        hinglishExplanation:
+          "Lock Compatibility Matrix batata hai kaun se locks EK SAATH grant ho sakte hain. Do transactions EK SAATH SHARED lock hold kar sakte hain. EXCLUSIVE lock kisi bhi doosre lock ke saath INCOMPATIBLE hota hai. Isliye sirf 'S aur S' wala case immediately grant hoga.",
       },
       {
         id: "w7-q6",
@@ -945,6 +1076,8 @@ const rawWeeks = [
         correctAnswers: ["Transaction T1 waits until transaction T2 releases the lock."],
         explanation:
           "In Wait-Die, an older transaction (smaller timestamp) is allowed to wait for a younger one holding the lock. Since T1 (8) is older than T2 (15), T1 waits.",
+        hinglishExplanation:
+          "Wait-Die scheme mein CHOTA timestamp matlab PURANA transaction. Agar OLDER, YOUNGER ka lock maange, OLDER WAIT karta hai. Agar YOUNGER, OLDER ka lock maange, YOUNGER ROLLBACK hota hai. T1(8) OLDER hai T2(15) se, aur T1 T2 ka lock maang raha hai — isliye T1 WAIT karega.",
       },
       {
         id: "w7-q7",
@@ -962,6 +1095,8 @@ const rawWeeks = [
         ],
         explanation:
           "T1 releases its shared lock on A before commit but holds its exclusive lock on B until commit — satisfying basic 2PL and Strict 2PL, but not Rigorous 2PL. T2 holds both its locks until after commit, satisfying Rigorous 2PL (and therefore Strict 2PL and 2PL too).",
+        hinglishExplanation:
+          "Basic 2PL: lock release ke baad naya lock nahi le sakte. Strict 2PL: sirf EXCLUSIVE locks commit tak hold karne padte hain. Rigorous 2PL: DONO locks commit tak hold karne padte hain. T1 shared lock commit se PEHLE release karta hai (Strict, not Rigorous). T2 dono locks commit ke baad release karta hai (Rigorous).",
       },
       {
         id: "w7-q8",
@@ -977,6 +1112,8 @@ const rawWeeks = [
         correctAnswers: ["Neither S1 nor S2 will suffer from deadlock."],
         explanation:
           "In S1, T2's shared lock request on A is compatible with T1's shared lock, and after T1 unlocks B, T2's exclusive lock request on B is granted — no deadlock. In S2, after T1 releases its exclusive lock on A, T2's shared lock request on A is granted, and shared locks on B are mutually compatible — no deadlock in either.",
+        hinglishExplanation:
+          "Deadlock tab hota hai jab transactions EK DOOSRE KA LOCK circularly WAIT kar rahe hon. Dono schedules mein jab bhi koi lock request hota hai, woh ya toh compatible hota hai ya pehle wala release ho chuka hota hai — isliye circular waiting kahin nahi banti, matlab KOI DEADLOCK NAHI.",
       },
       {
         id: "w7-q9",
@@ -992,6 +1129,8 @@ const rawWeeks = [
         correctAnswers: ["S1 is a Recoverable Schedule, whereas S2 is a Cascadeless Schedule."],
         explanation:
           "In S1, T2 reads X only after T1 commits, so S1 is Recoverable, Cascadeless, and Strict. In S2, T2 reads X before T1 commits but commits only after T1 commits, so S2 is Recoverable but NOT Cascadeless. This makes statement (d) false, since S2 is not actually cascadeless.",
+        hinglishExplanation:
+          "RECOVERABLE: Tj, Ti ka data padhe toh Ti ka commit, Tj ke commit se PEHLE hona chahiye. CASCADELESS: Ti ka commit, Tj ke READ se bhi PEHLE hona chahiye. S1 mein T2 commit ke BAAD hi read karta hai — Recoverable+Cascadeless+Strict. S2 mein T2 commit se PEHLE read karta hai (commit baad mein) — Recoverable hai but Cascadeless NAHI.",
       },
       {
         id: "w7-q10",
@@ -1002,6 +1141,8 @@ const rawWeeks = [
         correctAnswers: ["1"],
         explanation:
           "The final update on both X and Y is made by T1, so T1 must execute after T2 and T3: (T2, T3) → T1. The initial read of X is by T3, and T2 is the first transaction to update X after that read, giving T3 → T2. The write-read sequence (T2 writes X, then T1 reads X) gives T2 → T1. The only valid ordering is T3 → T2 → T1, so there is exactly 1 possible view serializable schedule.",
+        hinglishExplanation:
+          "View serializability ke rules: (1) FINAL value likhne wala transaction sabse AAKHIR mein — T1 (X aur Y dono). (2) Initial read wale ke baad pehla write — T3→T2. (3) Write-read sequence — T2→T1. In sab ko combine karne se sirf EK valid ordering: T3→T2→T1.",
       },
     ],
   },
@@ -1017,6 +1158,8 @@ const rawWeeks = [
         options: ["Sample option A", "Sample option B", "Sample option C", "Sample option D"],
         correctAnswers: ["Sample option B"],
         explanation: "Replace this whole week once you upload Assignment 8.",
+        hinglishExplanation:
+          "Yeh Week 8 ka placeholder question hai — asli Assignment 8 milne ke baad iska Hinglish concept explanation bhi update kar diya jaayega.",
       },
       {
         id: "w8-q2",
@@ -1025,6 +1168,8 @@ const rawWeeks = [
         options: ["Sample option A", "Sample option B", "Sample option C", "Sample option D"],
         correctAnswers: ["Sample option C"],
         explanation: "Replace this whole week once you upload Assignment 8.",
+        hinglishExplanation:
+          "Yeh Week 8 ka placeholder question hai — asli Assignment 8 milne ke baad iska Hinglish concept explanation bhi update kar diya jaayega.",
       },
     ],
   },

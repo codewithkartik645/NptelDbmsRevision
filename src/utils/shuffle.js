@@ -22,6 +22,7 @@ export function buildSession(questions) {
     options: shuffleArray(q.options),
     correctAnswers: q.correctAnswers,
     explanation: q.explanation || "",
+    hinglishExplanation: q.hinglishExplanation || "",
   }));
 }
 
