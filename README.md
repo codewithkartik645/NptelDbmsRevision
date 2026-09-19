@@ -3,9 +3,9 @@
 A practice platform for your NPTEL DBMS assignments: shuffled questions and options on every attempt, mastery tracking, weak-question practice, exam mode, and full result history — all saved locally in your browser.
 
 ## What's loaded right now
-Weeks 1–7 contain your real DBMS Assignment 1–7 questions (72 total), transcribed from the PDFs you uploaded. Week 8 is a placeholder with 2 sample questions — send me Assignment 8 and I'll swap it in.
+All 8 weeks contain your real DBMS Assignment 1–8 questions (80 total), transcribed from the PDFs you uploaded.
 
-A few notes on the transcription are documented at the top of `src/data/questions.js`, including two spots where the source PDF used diagrams/table-images instead of plain text (Week 7, Q3 and Q10) — I've flagged exactly what was reconstructed there.
+A few notes on the transcription are documented at the top of `src/data/questions.js`, including spots where the source PDF used diagrams/table-images instead of plain text (Week 7 Q3 & Q10, Week 8 Q5 & Q6) — I've flagged exactly what was reconstructed there.
 
 ## Running it
 
@@ -24,7 +24,7 @@ npm run preview   # serves the built dist/ folder locally
 
 Don't open `dist/index.html` directly by double-clicking it — browsers block ES module scripts loaded via `file://`. Use `npm run preview` or any static file server instead.
 
-## Adding your real Week 8 (or editing any week)
+## Editing or adding questions
 Everything lives in one file: `src/data/questions.js`. Each question needs:
 - `id` — unique string
 - `type` — `"MCQ"` (single answer) or `"MSQ"` (multi-select)

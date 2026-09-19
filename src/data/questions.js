@@ -1,10 +1,9 @@
 // ============================================================================
 // QUESTION DATA
 //
-// Weeks 1-7 below are transcribed directly from your uploaded NPTEL DBMS
-// assignment PDFs (Assignments 1-7). Wording, options, and answers are kept
-// exactly as given, except where noted inline. Week 8 is still a placeholder
-// — swap it in once you send that assignment.
+// All 8 weeks below are transcribed directly from your uploaded NPTEL DBMS
+// assignment PDFs (Assignments 1-8). Wording, options, and answers are kept
+// exactly as given, except where noted inline.
 //
 // Schema:
 // {
@@ -40,6 +39,14 @@
 // - Week 7, Q10: the schedule was a table image. The row-by-row sequence
 //   below has been reconstructed from the worked explanation (which states
 //   the read/write order explicitly), not copied directly from a table.
+// - Week 8, Q5: the source PDF drew this as a transaction timeline diagram
+//   (bars against Checkpoint 1 / Checkpoint 2 / System Failure). The
+//   start/commit relationships for each transaction below are reconstructed
+//   from the worked explanation and the diagram description, not copied
+//   verbatim from a table.
+// - Week 8, Q6: the source PDF drew two query-tree diagrams (Figure 1 /
+//   Figure 2). The indented tree structure below reproduces the same
+//   operations and nesting shown in those diagrams as text.
 // ============================================================================
 
 const rawWeeks = [
@@ -1149,27 +1156,174 @@ const rawWeeks = [
   {
     week: 8,
     title: "Week 8",
-    topic: "Placeholder — send Assignment 8 and I'll swap this in",
+    topic: "Assignment 8 — Recovery (immediate modification, checkpoints, logical undo), query cost & optimization",
     questions: [
       {
         id: "w8-q1",
-        type: "MCQ",
-        question: "PLACEHOLDER — Week 8 hasn't been uploaded yet. This is a sample question standing in for it.",
-        options: ["Sample option A", "Sample option B", "Sample option C", "Sample option D"],
-        correctAnswers: ["Sample option B"],
-        explanation: "Replace this whole week once you upload Assignment 8.",
+        type: "MSQ",
+        question:
+          "Assume an immediate database modification scheme. Consider the following log records for transactions T0, T1, T2, T3 and T4:\nsteps | Details of log\n1 | <T0,start>\n2 | <T0,A,400,600>\n3 | <T1,start>\n4 | <T1,B,600,900>\n5 | <T2,start>\n6 | <T0,commit>\n7 | <T2,C,900,1500>\n8 | <checkpoint{T1, T2}>\n9 | <T3,start>\n10 | <T2,commit>\n11 | <T3,D,800,900>\n12 | <T3,commit>\n13 | <T4,start>\n14 | <T4,E,500,1000>\n\nIf there is a crash just after step 14 and the recovery of the system is successfully completed, identify the correct action for the above scenario.",
+        options: [
+          "After recovery completion, value of B will be 600.",
+          "After recovery completion, value of C will be 1500.",
+          "After recovery completion, value of D will be 800.",
+          "After recovery completion, value of E will be 1000.",
+        ],
+        correctAnswers: [
+          "After recovery completion, value of B will be 600.",
+          "After recovery completion, value of C will be 1500.",
+        ],
+        explanation:
+          "In the immediate database modification scheme, during recovery after a crash, a transaction needs to be redone if and only if both <Ti,start> and <Ti,commit> are present in the log. Otherwise undo is required. Any transaction committed before the last checkpoint is ignored (updates already output to disk). Here the redo list is {T2, T3} and the undo list is {T1, T4}; T0 needs no action since it committed before the checkpoint. Undoing T1 restores B to its before-value (600), and redoing T2 sets C to its after-value (1500) — so options (a) and (b) are correct.",
         hinglishExplanation:
-          "Yeh Week 8 ka placeholder question hai — asli Assignment 8 milne ke baad iska Hinglish concept explanation bhi update kar diya jaayega.",
+          "Immediate database modification scheme mein, recovery ke time yeh dekha jaata hai ki kis transaction ke log mein <start> AUR <commit> dono hain — agar dono hain toh REDO karna hai, agar sirf <start> hai (commit nahi hua) toh UNDO karna hai. Jo transaction LAST CHECKPOINT se PEHLE commit ho chuka hai, use IGNORE kar dete hain (uska data already disk pe safely likha ja chuka hai). Yahan T0 checkpoint se pehle commit hua tha isliye ignore. T1 aur T4 crash tak commit nahi hue the, isliye UNDO honge (matlab B wapas apni PURANI value 600 pe chali jaayegi). T2 aur T3 checkpoint ke baad commit ho chuke the, isliye REDO honge (matlab C apni NAYI value 1500 pe rahegi). Isliye options (a) aur (b) sahi hain.",
       },
       {
         id: "w8-q2",
         type: "MCQ",
-        question: "PLACEHOLDER — Week 8 hasn't been uploaded yet. This is a sample question standing in for it.",
-        options: ["Sample option A", "Sample option B", "Sample option C", "Sample option D"],
-        correctAnswers: ["Sample option C"],
-        explanation: "Replace this whole week once you upload Assignment 8.",
+        question:
+          "Assume an immediate database modification scheme. Consider the following log records for transactions T5, T6, T7, T8 and T9:\nsteps | Details of log\n1 | <T5,start>\n2 | <T5,A,150,250>\n3 | <T6,start>\n4 | <T6,B,250,350>\n5 | <T5,commit>\n6 | <checkpoint{T6}>\n7 | <T6,commit>\n8 | <T7,start>\n9 | <T7,C,350,550>\n10 | <T8,start>\n11 | <T8,D,700,900>\n12 | <T8,commit>\n13 | <T9,start>\n14 | <T9,E,900,1100>\n\nIf there is a crash just after step 14 and the recovery of the system is successfully completed, identify the correct recovery action for the above scenario.",
+        options: [
+          "No Action: T5; Redo: T7, T8; Undo: T6, T9",
+          "No Action: T6; Redo: T7, T8; Undo: T5, T9",
+          "No Action: T5; Redo: T7, T9; Undo: T6, T8",
+          "No Action: T5; Redo: T6, T8; Undo: T7, T9",
+        ],
+        correctAnswers: ["No Action: T5; Redo: T6, T8; Undo: T7, T9"],
+        explanation:
+          "T5 committed before the checkpoint, so no action is required for it. T6 was active at the checkpoint but committed after it, so it must be redone. T7 started after the checkpoint but never committed before the crash, so it must be undone. T8 started after the checkpoint and committed before the crash, so it must be redone. T9 started after the checkpoint but never committed, so it must be undone. Final lists: No Action: T5; Redo: T6, T8; Undo: T7, T9.",
         hinglishExplanation:
-          "Yeh Week 8 ka placeholder question hai — asli Assignment 8 milne ke baad iska Hinglish concept explanation bhi update kar diya jaayega.",
+          "Yahan bhi wahi logic hai: jo checkpoint se PEHLE commit ho chuka (T5), use koi action nahi chahiye. Jo checkpoint ke time active tha lekin BAAD mein commit hua (T6, T8), unhe REDO karna hai. Jo start toh hua lekin crash tak commit NAHI hua (T7, T9), unhe UNDO karna hai. Isliye final answer: No Action T5; Redo T6,T8; Undo T7,T9.",
+      },
+      {
+        id: "w8-q3",
+        type: "MCQ",
+        question:
+          "Identify the cost estimation of a query evaluation plan, if 8000 blocks are required to be transferred from the disk and the required number of disk seeks are 40.\n• Time to transfer one block: tT = 5 milliseconds.\n• Time for one seek: tS = 0.5 seconds.",
+        options: ["40 Seconds", "50 Seconds", "60 Seconds", "70 Seconds"],
+        correctAnswers: ["60 Seconds"],
+        explanation:
+          "Cost for b block transfers plus S seeks = (b × tT + S × tS) seconds = (8000 × 5 × 10⁻³) + (40 × 0.5) seconds = (40 + 20) seconds = 60 seconds.",
+        hinglishExplanation:
+          "Query cost estimate karne ka formula hai: Total cost = (block transfers × time per block) + (number of seeks × time per seek). Yahan values daalo: (8000 blocks × 5 milliseconds) + (40 seeks × 0.5 seconds) = (8000×0.005) + (40×0.5) = 40 seconds + 20 seconds = 60 seconds.",
+      },
+      {
+        id: "w8-q4",
+        type: "MCQ",
+        question:
+          "Let us consider the following statistics for two relations Vehicle and Service_Record:\n• Number of records of Vehicle: n(Vehicle) = 5000.\n• Number of blocks of Vehicle: b(Vehicle) = 50.\n• Number of records of Service_Record: n(Service_Record) = 1000.\n• Number of blocks of Service_Record: b(Service_Record) = 10.\n\nConsider a natural join of Vehicle and Service_Record relations (Vehicle ⋈ Service_Record). Identify the required number of block transfers in the worst case (enough memory only to hold one block of each relation) using Nested-loop join and assuming Vehicle as the outer relation.",
+        options: [
+          "5000 block transfers",
+          "50010 block transfer",
+          "50050 block transfers",
+          "60060 block transfers",
+        ],
+        correctAnswers: ["50050 block transfers"],
+        explanation:
+          "For block nested-loop join with only one block of memory per relation, the outer relation is read block-by-block, and for each outer block the entire inner relation is scanned. Number of block transfers = n(outer) × b(inner) + b(outer) = 5000×10 + 50 = 50050, with Vehicle as the outer relation.",
+        hinglishExplanation:
+          "Nested-loop join mein (jab memory sirf ek-ek block hold kar sakti hai), formula hota hai: Block transfers = (outer relation ke records × inner relation ke blocks) + outer relation ke blocks. Vehicle ko OUTER lene par: 5000 (Vehicle records) × 10 (Service_Record blocks) + 50 (Vehicle blocks) = 50000+50 = 50050 block transfers.",
+      },
+      {
+        id: "w8-q5",
+        type: "MCQ",
+        question:
+          "Consider the following state of transactions on a timeline that has two checkpoints (Checkpoint 1, Checkpoint 2) followed by a System Failure. (Flagged: this was originally a timeline diagram in the source PDF; the bar positions below are reconstructed from the worked explanation, since a diagram isn't transcribable as text.)\n\n- T1: starts and commits, both entirely before Checkpoint 1.\n- T2: starts before Checkpoint 1 and commits right at/around Checkpoint 1.\n- T3: starts after Checkpoint 1 and commits before Checkpoint 2.\n- T4: starts before Checkpoint 2 (spanning across it) and commits after Checkpoint 2, before the System Failure.\n- T5: starts before Checkpoint 2 (spanning across it) and is still running (uncommitted) at the System Failure.\n- T6: starts before Checkpoint 2 (spanning across it) and is still running (uncommitted) at the System Failure.\n\nConsider the following statements:\n1. T1, T2 and T3 can be ignored.\n2. T2 and T4 can be ignored.\n3. T5, and T6 need to be redone.\n4. T5 and T6 need to be undone.\n5. Only T4 needs to be redone.\n\nIdentify the correct group of statements from the options below.",
+        options: ["1), 2), 3), 5)", "1), 3), 4), 5)", "1), 4), 5)", "1), 2), 5)"],
+        correctAnswers: ["1), 4), 5)"],
+        explanation:
+          "Any transaction committed before the last checkpoint (Checkpoint 2) should be ignored — so T1, T2 and T3 can be ignored, since their updates are already safely on disk. Any transaction committed since the last checkpoint needs to be redone — T4 fits this, so it must be redone. Any transaction still running at the time of failure needs to be undone and restarted — T5 and T6 fit this. So the correct group is statements 1), 4), and 5).",
+        hinglishExplanation:
+          "Recovery ka rule simple hai: jo transaction LAST CHECKPOINT (yaha Checkpoint 2) se PEHLE commit ho chuka hai, use IGNORE karo (T1, T2, T3 — inka data already safely disk pe hai). Jo checkpoint ke BAAD commit hua hai, use REDO karo (T4). Jo crash ke waqt tak bhi RUNNING tha (commit hi nahi hua), use UNDO karo (T5, T6). Isliye sahi group hai: statements 1), 4), aur 5).",
+      },
+      {
+        id: "w8-q6",
+        type: "MCQ",
+        question:
+          "Consider the following relational schema:\nVehicle(vehicle_id, vehicle_name, model, owner_id)\nService_Record(service_id, vehicle_id, service_date, service_cost)\nOwner(owner_id, owner_name, address, phone)\n\nTwo query trees are given below, both ultimately computing Π(vehicle_name, owner_name) over a join of all three relations. (Flagged: the source PDF drew these as query-tree diagrams; the indented text below reconstructs the same tree structure.)\n\nFigure 1 — selection is applied AFTER both joins are done:\nΠ(vehicle_name, owner_name)\n  of  σ(service_cost > 5000)\n        of  [ (Vehicle ⋈ Service_Record) ⋈ Owner ]\n\nFigure 2 — selection is pushed down and applied directly on Service_Record, BEFORE the join:\nΠ(vehicle_name, owner_name)\n  of  [ (Vehicle ⋈ σ(service_cost > 5000)(Service_Record)) ⋈ Owner ]\n\nIdentify the correct statement for the above two query trees.",
+        options: [
+          "Two query trees are equivalent and the query tree of Figure 1 will lead to more efficient query processing.",
+          "Two query trees are equivalent and the query tree of Figure 2 will lead to more efficient query processing.",
+          "Two query trees are equivalent as identical operations (irrespective of their positions) are used in both trees.",
+          "Two query trees are not equivalent as selection or projection operations cannot be carried out before or after the natural join operation.",
+        ],
+        correctAnswers: [
+          "Two query trees are equivalent and the query tree of Figure 2 will lead to more efficient query processing.",
+        ],
+        explanation:
+          "The two trees are equivalent, but Figure 2 is more efficient because performing the selection as early as possible (directly on Service_Record, before the join) reduces the size of the relation participating in the natural join — fewer tuples need to be processed during the join.",
+        hinglishExplanation:
+          "Query optimization ka ek basic rule hai: SELECTION operation ko JITNI JALDI ho sake apply karo (push it down), taaki join se PEHLE hi relation ka size chota ho jaaye. Figure 1 mein selection SABSE AAKHIR mein (dono joins ke baad) apply ho raha hai — matlab bade table pe selection lag raha hai, slow hai. Figure 2 mein selection Service_Record pe pehle hi apply ho jaata hai, phir chote result ko join kiya jaata hai — fast hai. Dono trees SAME result denge (equivalent hain), lekin Figure 2 zyada EFFICIENT hai kyunki join mein kam tuples process karne padte hain.",
+      },
+      {
+        id: "w8-q7",
+        type: "MSQ",
+        question:
+          "Consider the following relational schema:\nVehicle(vehicle_id, vehicle_name, model, owner_id)\nService_Record(service_id, vehicle_id, service_date, service_cost)\nOwner(owner_id, owner_name, address, phone)\n\nFour relational algebra queries are given below:\nQ1: σ(model='SUV')( σ(service_cost>5000)( Vehicle ⋈ Service_Record ⋈ Owner ) )\nQ2: σ(model='SUV' ∧ service_cost>5000)( Vehicle ⋈ Service_Record ⋈ Owner )\nQ3: Π(vehicle_name, owner_name)( Vehicle ⋈ Service_Record ⋈ Owner )\nQ4: Π(vehicle_name, owner_name)( Vehicle × Service_Record × Owner )\n\nIdentify the correct options from the options given below.",
+        options: [
+          "Q1 is equivalent to Q2.",
+          "Q1 is not equivalent to Q2.",
+          "Q3 is equivalent to Q4.",
+          "Q3 is not equivalent to Q4.",
+        ],
+        correctAnswers: ["Q1 is equivalent to Q2.", "Q3 is not equivalent to Q4."],
+        explanation:
+          "Q1 and Q2 give the same result because two consecutive selections can always be combined into one using AND: σC1(σC2(R)) = σ(C1∧C2)(R). So Q1 is equivalent to Q2. Q3 and Q4 do NOT give the same result, because the natural join of the three relations (which matches on shared key attributes) is not the same as their unrestricted Cartesian product (which pairs every row with every row, including non-matching combinations).",
+        hinglishExplanation:
+          "Do CONSECUTIVE selections (σC1(σC2(R))) ko hamesha EK selection mein combine kiya ja sakta hai AND (∧) use karke — σ(C1∧C2)(R). Isliye Q1 aur Q2 same result denge, matlab equivalent hain. Lekin NATURAL JOIN (⋈) aur CARTESIAN PRODUCT (×) ALAG hote hain — natural join sirf MATCHING rows ko jodta hai (common key ke through), jabki cartesian product HAR row ko HAR row ke saath jod deta hai (bina match check kiye). Isliye Q3 aur Q4 equivalent NAHI hain.",
+      },
+      {
+        id: "w8-q8",
+        type: "MCQ",
+        question:
+          "Consider the log record of Transaction T1 with one operation instance O1, used in a recovery system with early lock release, B+ tree based concurrency control.\nStep | Operation\n1 | <T1,start>\n2 | <T1,X,900,800>\n3 | <T1,O1,operation-begin>\n4 | <T1,Y,400,700>\n5 | <T1,Z,500,900>\n6 | <T1,O1,operation-end,(Y,-300),(Z,-400)>\n7 | crash or abort here\n\nChoose the correct set of log entries for the recovery of transactions.",
+        options: [
+          "<T1,Z,500,900>\n<T1,Y,400,700>\n<T1,O1,operation-abort>\n<T1,X,900>\n<T1,abort>",
+          "<T1,Z,500,900>\n<T1,Y,400,700>\n<T1,O1,operation-abort>\n<T1,X,800>\n<T1,abort>",
+          "<T1,Z,900,500>\n<T1,Y,700,400>\n<T1,O1,operation-abort>\n<T1,X,800>\n<T1,abort>",
+          "<T1,Z,900,500>\n<T1,Y,700,400>\n<T1,O1,operation-abort>\n<T1,X,900>\n<T1,abort>",
+        ],
+        correctAnswers: ["<T1,Z,900,500>\n<T1,Y,700,400>\n<T1,O1,operation-abort>\n<T1,X,900>\n<T1,abort>"],
+        explanation:
+          "Recovery scans the log backward. At step 6, the operation-end log for O1 with (Y,-300) and (Z,-400) is found, meaning O1 needs a LOGICAL undo — reverse the +300 and +400 changes it made on Y and Z respectively, rather than a plain physical undo. This produces new compensation log records <T1,Z,900,500>, <T1,Y,700,400>, and <T1,O1,operation-abort> (in that order, undoing Z then Y since we scan backward from step 5 to step 3). Then step 2's physical update on X is undone normally with <T1,X,900> (X's before-value). Finally <T1,abort> is logged for step 1. This matches option (d).",
+        hinglishExplanation:
+          "Recovery LOG ko hamesha PEECHE se (backward) scan karte hain. Step 6 mein O1 ka 'operation-end' log milta hai jisme likha hai ki Y mein -300 aur Z mein -400 ka change hua tha. Chunki yeh ek LOGICAL operation tha, humein iska REVERSE karna hoga — pehle Z (900→500 wapas), fir Y (700→400 wapas), fir O1 ko 'operation-abort' mark karo. Uske baad step 2 ka normal physical undo hoga X ke liye (X ki purani value 900 wapas). Aakhir mein poori transaction ko 'abort' mark kar dete hain — yeh sab sahi order mein option (d) mein diya gaya hai.",
+      },
+      {
+        id: "w8-q9",
+        type: "MCQ",
+        question:
+          "Consider the following relational schema:\nArtifact(AID, Artifact_Name, Gallery_ID, Year_Acquired)\nGallery(Gallery_ID, Gallery_Name)\n\nConsider the following relational algebra expression:\nΠ(Artifact_Name)( σ(Gallery_Name='Ancient' ∧ Year_Acquired<1900)( Artifact ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) Gallery ) )\n\nIdentify the most optimized relational algebra expression equivalent to the above relational algebra expression.",
+        options: [
+          "Π(Artifact_Name)( σ(Year_Acquired<1900)(Artifact) ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) σ(Gallery_Name='Ancient')(Gallery) )",
+          "Π(Artifact_Name)( σ(Gallery_Name='Ancient')( σ(Year_Acquired<1900)( Artifact ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) Gallery ) ) )",
+          "Π(Artifact_Name, Gallery_ID)( σ(Year_Acquired<1900 ∧ Gallery_Name='Ancient')( Artifact ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) Gallery ) )",
+          "Π(Artifact_Name)( Artifact ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) σ(Year_Acquired<1900 ∧ Gallery_Name='Ancient')(Gallery) )",
+        ],
+        correctAnswers: [
+          "Π(Artifact_Name)( σ(Year_Acquired<1900)(Artifact) ⋈(Artifact.Gallery_ID=Gallery.Gallery_ID) σ(Gallery_Name='Ancient')(Gallery) )",
+        ],
+        explanation:
+          "The optimization pushes each part of the selection condition down to the relation it actually belongs to: Year_Acquired<1900 refers to an Artifact attribute, so it's pushed onto Artifact; Gallery_Name='Ancient' refers to a Gallery attribute, so it's pushed onto Gallery. This shrinks both relations before the (more expensive) join runs. Option (b) only pushes the Year_Acquired condition down and leaves Gallery_Name applied after the join, so it's less optimized. Option (d) is invalid — it applies Year_Acquired<1900 to Gallery, but Year_Acquired isn't even an attribute of Gallery.",
+        hinglishExplanation:
+          "Query optimization mein selection condition ke HAR PART ko us relation pe PUSH DOWN karna chahiye jisse woh actually SAMBANDHIT (related) hai. Yahan 'Year_Acquired<1900' Artifact table ka attribute hai, isliye ise Artifact pe hi apply karna chahiye — Gallery pe nahi (kyunki Gallery mein Year_Acquired hai hi nahi). Aur 'Gallery_Name=Ancient' Gallery table ka attribute hai, isliye ise Gallery pe apply karo. Dono conditions ko unke SAHI relation pe pehle hi apply karke, dono tables CHOTE ho jaate hain JOIN se pehle — isse join fast ho jaata hai.",
+      },
+      {
+        id: "w8-q10",
+        type: "MCQ",
+        question:
+          "Consider the following Relational Algebra expression:\n(R1 ⋈θ R2) − (R1 ⋈θ R3),\nwhere R1, R2, and R3 are relational algebra expressions and θ is the join condition.\n\nIdentify the correct equivalent Relational Algebra expression.",
+        options: [
+          "R1 ∩ (R2 ⋈θ R3)",
+          "(R1 ⋈θ R2) − R3",
+          "R1 ⋈θ (R2 − R3)",
+          "(R1 ⋈θ R2) ∩ (R1 ⋈θ R3)",
+        ],
+        correctAnswers: ["R1 ⋈θ (R2 − R3)"],
+        explanation:
+          "By the distributive property of the θ-join over set difference: R1 ⋈θ (R2 − R3) = (R1 ⋈θ R2) − (R1 ⋈θ R3). So the join-then-subtract form on the left simplifies to subtracting first, then joining once.",
+        hinglishExplanation:
+          "Yeh ek IMPORTANT algebraic identity hai: JOIN operation, SET DIFFERENCE (−) ke saath DISTRIBUTE hota hai — matlab R1 ⋈ (R2−R3) = (R1⋈R2) − (R1⋈R3). Iska practical fayda yeh hai ki hum PEHLE chota set-difference (R2−R3) nikaal sakte hain, fir sirf EK BAAR join kar sakte hain — jo do baar join karke phir subtract karne se ZYADA EFFICIENT hota hai.",
       },
     ],
   },
