@@ -23,6 +23,16 @@ export function buildSession(questions) {
     correctAnswers: q.correctAnswers,
     explanation: q.explanation || "",
     hinglishExplanation: q.hinglishExplanation || "",
+    // Diagram wiring: `diagram` renders with the question prompt (needed to
+    // answer); `explanationDiagram` renders only after checking the answer
+    // (the source PDF only revealed it in the worked explanation, so
+    // showing it earlier would give the answer away); `optionDiagramMap`
+    // renders a small diagram inside a specific option button instead of
+    // plain text, keyed by that option's exact string so it survives
+    // shuffling. All three are optional and simply omitted when unused.
+    diagram: q.diagram || null,
+    explanationDiagram: q.explanationDiagram || null,
+    optionDiagramMap: q.optionDiagramMap || null,
   }));
 }
 

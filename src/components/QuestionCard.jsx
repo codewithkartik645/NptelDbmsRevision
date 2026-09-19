@@ -1,5 +1,6 @@
 import { Check, X, Circle, CheckCircle2, Square, CheckSquare } from "lucide-react";
 import FormattedText from "./FormattedText.jsx";
+import DiagramRenderer, { OptionDiagram } from "./DiagramRenderer.jsx";
 
 // Exact-set comparison: correct only if selected options exactly match correctAnswers.
 export function isAnswerCorrect(selected, correctAnswers) {
@@ -37,6 +38,7 @@ export default function QuestionCard({
       </div>
 
       <div className="px-5 py-4">
+        <DiagramRenderer diagram={question.diagram} />
         <FormattedText
           text={question.question}
           className="font-display text-[15px] leading-relaxed text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
@@ -87,6 +89,8 @@ export default function QuestionCard({
               ? CheckCircle2
               : Circle;
 
+            const optionDiagramKey = question.optionDiagramMap?.[opt];
+
             return (
               <button
                 key={opt}
@@ -95,7 +99,14 @@ export default function QuestionCard({
                 className={`flex w-full min-h-[44px] items-start gap-3 rounded-md border px-3.5 py-2.5 text-left text-sm transition-colors disabled:cursor-default ${stateClasses}`}
               >
                 <Icon size={17} className={`mt-0.5 shrink-0 ${iconClass}`} strokeWidth={2} />
-                <FormattedText text={opt} className={`min-w-0 flex-1 ${textClass}`} tableClassName={`${tableBgClass} px-1.5 py-1`} />
+                {optionDiagramKey ? (
+                  <div className={`min-w-0 flex-1 ${textClass}`}>
+                    <p className="mb-1 text-sm font-medium">{opt}</p>
+                    <OptionDiagram diagramKey={optionDiagramKey} />
+                  </div>
+                ) : (
+                  <FormattedText text={opt} className={`min-w-0 flex-1 ${textClass}`} tableClassName={`${tableBgClass} px-1.5 py-1`} />
+                )}
               </button>
             );
           })}
@@ -126,6 +137,11 @@ export default function QuestionCard({
               <div className="mt-2 border-t border-black/10 pt-2 text-[var(--color-ink)]/70">
                 <p className="mb-0.5 font-medium text-[var(--color-ink)]">Explanation</p>
                 <p className="whitespace-pre-wrap">{question.explanation}</p>
+                {question.explanationDiagram && (
+                  <div className="mt-1 text-[var(--color-ink)]">
+                    <DiagramRenderer diagram={question.explanationDiagram} />
+                  </div>
+                )}
               </div>
             )}
             {question.hinglishExplanation && (

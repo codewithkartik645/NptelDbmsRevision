@@ -26,27 +26,23 @@
 // A question's `correctAnswers` is always an array — one entry for MCQ,
 // two or more for MSQ. Scoring requires the selected set to exactly match.
 //
-// FLAGGED AMBIGUITIES (transcribed honestly rather than silently guessed):
+// DIAGRAMS: questions whose source PDF used an actual diagram (ER diagrams,
+// 2-3-4 trees, wait-for graphs, a recovery timeline, query-optimization
+// trees) now render a real inline SVG diagram — reconstructed pixel-by-pixel
+// against the extracted PDF images, not just described in text. See
+// `diagram` / `optionDiagramMap` / `explanationDiagram` fields below and
+// src/components/diagrams/Diagrams.jsx. Two spots that were previously
+// flagged as reconstructed-from-explanation text guesses have now been
+// verified directly against the source (Week 7 Q3's four wait-for-graph
+// edge sets, confirmed pixel-by-pixel; Week 7 Q10's exact schedule step
+// order, confirmed via the PDF's preserved column layout — one step was
+// corrected from T2:W(X) to the actual T3:W(X)).
+//
+// FLAGGED AMBIGUITY (still unresolved — a genuine source artifact, not a
+// diagram):
 // - Week 1, Q10: options (a) and (d) render as visually identical projection
 //   expressions in the source PDF due to a symbol-extraction artifact. The
 //   answer key itself (option c) is unambiguous and preserved correctly.
-// - Week 7, Q3: the four answer choices were drawn as wait-for-graph
-//   diagrams in the source PDF, not as text. The correct edge set (option c)
-//   is preserved from the explanation; the three incorrect diagram options
-//   have been redrawn as plausible edge-direction variants rather than
-//   transcribed pixel-for-pixel, since the diagrams themselves aren't
-//   recoverable as text.
-// - Week 7, Q10: the schedule was a table image. The row-by-row sequence
-//   below has been reconstructed from the worked explanation (which states
-//   the read/write order explicitly), not copied directly from a table.
-// - Week 8, Q5: the source PDF drew this as a transaction timeline diagram
-//   (bars against Checkpoint 1 / Checkpoint 2 / System Failure). The
-//   start/commit relationships for each transaction below are reconstructed
-//   from the worked explanation and the diagram description, not copied
-//   verbatim from a table.
-// - Week 8, Q6: the source PDF drew two query-tree diagrams (Figure 1 /
-//   Figure 2). The indented tree structure below reproduces the same
-//   operations and nesting shown in those diagrams as text.
 // ============================================================================
 
 const rawWeeks = [
@@ -414,8 +410,9 @@ const rawWeeks = [
       {
         id: "w3-q3",
         type: "MSQ",
+        diagram: "ERContactUser",
         question:
-          "Consider the following Entity Relationship Diagram:\n\nContact(Name, Number) --- Maintains --- User(ID, UName)\nContact is a superclass (ISA) of Personal(Social_site) and Professional(Email) — both subtypes inherit Contact's attributes.\n\nIf n[Contact] is the number of attributes present in the relational schema of Contact, n[Personal] is the number of attributes present in the relational schema of Personal, and n[Professional] is the number of attributes present in the relational schema of Professional, which of the following options can NOT be true?",
+          "Consider the following Entity Relationship Diagram (shown above):\nContact is a superclass (ISA) of Personal and Professional — both subtypes inherit Contact's attributes.\n\nIf n[Contact] is the number of attributes present in the relational schema of Contact, n[Personal] is the number of attributes present in the relational schema of Personal, and n[Professional] is the number of attributes present in the relational schema of Professional, which of the following options can NOT be true?",
         options: ["n[Contact] = 2", "n[Personal] = 1", "n[Professional] = 1", "n[Professional] = 3"],
         correctAnswers: ["n[Personal] = 1", "n[Professional] = 1"],
         explanation:
@@ -426,8 +423,9 @@ const rawWeeks = [
       {
         id: "w3-q4",
         type: "MSQ",
+        diagram: "ERWindowsRoom",
         question:
-          "Consider the following Entity Relationship Diagram:\n\nWindows(Count, GlassType) --- Room_Win ---> Room(RNo, BedCount, WallColor, DecorType)\nOccupant(OID, FamCount, Phone) --- Room_Occ --- Room\nRoom has total participation (double line) in Room_Occ; Occupant is a weak entity related to Room via Room_Occ.\n\nWhich of the following options is (are) true?",
+          "Consider the following Entity Relationship Diagram (shown above):\nWindows connects to Room through the Room_Win relationship (drawn with a double line from Windows, and a double-bordered diamond — Windows participates totally, and Room_Win is an identifying relationship). Room connects to Occupant through Room_Occ, where Occupant is a weak entity.\n\nWhich of the following options is (are) true?",
         options: [
           "Participation of Occupant is total in Room_Occ.",
           "The primary key in the relational schema for Windows will be {Count, GlassType}.",
@@ -439,9 +437,9 @@ const rawWeeks = [
           "Participation of Room is partial in Room_Occ.",
         ],
         explanation:
-          "Total participation is identified by a double line. The primary key of a many-to-many relation is composed of its participating entities' primary keys. The primary key of a weak entity set contains the primary key of its identifying entity set.",
+          "Total participation is identified by a double line, partial participation by a single line. In the diagram, Windows has total participation in Room_Win (double line, and Room_Win's double-bordered diamond marks it as an identifying relationship). Both Room and Occupant connect to Room_Occ with a single line, so both have only partial participation there — meaning statement (a) ('Occupant is total') is false, not just statement (d) being true. The primary key of a weak entity set (Room_Occ, tying Occupant to Room) contains the primary key of its identifying entity set — hence {RNo, OID}.",
         hinglishExplanation:
-          "Yeh ER diagram mein Occupant ek WEAK ENTITY hai jo Room par depend karta hai. Weak entity ki primary key mein uski OWN partial key + identifying entity (Room) ki primary key dono hote hain — isliye Room_Occ ka primary key {RNo, OID} hoga. Diagram mein double line TOTAL participation dikhata hai aur single line PARTIAL participation — Room ka participation Room_Occ mein PARTIAL hai (Occupant ka total hai).",
+          "Yeh ER diagram mein Occupant ek WEAK ENTITY hai jo Room par depend karta hai. Weak entity ki primary key mein uski OWN partial key + identifying entity (Room) ki primary key dono hote hain — isliye Room_Occ ka primary key {RNo, OID} hoga. Diagram mein DOUBLE line TOTAL participation dikhata hai (Windows ka Room_Win mein) aur SINGLE line PARTIAL participation dikhata hai — Room AUR Occupant dono ka Room_Occ mein connection single line hai, matlab dono ka participation PARTIAL hai, Occupant ka bhi TOTAL nahi hai jaisa option (a) mein kaha gaya tha.",
       },
       {
         id: "w3-q5",
@@ -462,8 +460,9 @@ const rawWeeks = [
       {
         id: "w3-q6",
         type: "MCQ",
+        diagram: "ERAnimals",
         question:
-          "Consider the Entity Relationship diagram:\n\nANIMALS(SCNAME, LOCATION) specializes into OMNIVORES(HABITAT), CARNIVORES(FOODCHOICE), and HERBIVORES(USE).\nCARNIVORES further specializes into DOGS(BREED).\n\nWhich of the following statement(s) is/are TRUE?",
+          "Consider the Entity Relationship diagram (shown above), where ANIMALS specializes into OMNIVORES, CARNIVORES, and HERBIVORES, and CARNIVORES further specializes into DOGS.\n\nWhich of the following statement(s) is/are TRUE?",
         options: [
           "DOGS inherit the attributes of CARNIVORES but not of ANIMALS.",
           "DOGS inherit the attributes of CARNIVORES and ANIMALS.",
@@ -787,8 +786,9 @@ const rawWeeks = [
       {
         id: "w5-q7",
         type: "MSQ",
+        diagram: "ERGroupParticipant",
         question:
-          "In a Drawing Competition, participants individually can enroll their names for the competition. There are many groups in the competition depending on the age of the participants. A participant can participate in only one group and a group can consist of multiple participants. Each group has a unique name(GName) and a participant also has a unique id. The result of each group will be maintained separately.\n\nER structure: Group(GName, AgeLimit) --1---Participate---n--> Participant(PID, Name, Age), with Participate carrying attribute Result.\n\nWhich of the following statement(s) are incorrect?",
+          "In a Drawing Competition, participants individually can enroll their names for the competition. There are many groups in the competition depending on the age of the participants. A participant can participate in only one group and a group can consist of multiple participants. Each group has a unique name(GName) and a participant also has a unique id. The result of each group will be maintained separately, as shown in the ER diagram above.\n\nWhich of the following statement(s) are incorrect?",
         options: [
           "Entity Group will not have any primary key.",
           "Participate will be a one-to-many relationship between Group and Participants.",
@@ -897,6 +897,7 @@ const rawWeeks = [
       {
         id: "w6-q4",
         type: "MCQ",
+        explanationDiagram: "Tree234Final",
         question:
           "Insert the following keys into an empty 2-3-4 tree:\n11, 24, 31, 38, 45, 51, 52, 59, 66, 73\nHow many 3-nodes (nodes with 2 keys) will be in the final tree?",
         options: ["3", "2", "1", "0"],
@@ -921,8 +922,8 @@ const rawWeeks = [
       {
         id: "w6-q6",
         type: "MCQ",
-        question:
-          "Consider the following 2-3-4 tree in which each data item is a character:\n\n              [J]\n           /       \\\n        [C]        [N  T]\n       /   \\      /   |    \\\n     [A]  [E G H] [K L] [P] [U Y]\n\nHow many comparisons will be required to find 'M' in the above tree?",
+        diagram: "Tree234Search",
+        question: "Consider the following 2-3-4 tree in which each data item is a character (shown above).\n\nHow many comparisons will be required to find 'M' in the above tree?",
         options: ["2", "3", "4", "5"],
         correctAnswers: ["4"],
         explanation:
@@ -1022,18 +1023,19 @@ const rawWeeks = [
         id: "w7-q3",
         type: "MCQ",
         question:
-          "Suppose in a database, there are four transactions T1, T2, T3 and T4. Transaction T1 is waiting for transactions T3 and T4, transaction T2 is waiting for transaction T3, and transaction T3 is waiting for transaction T4 to release a data item.\n\nThe correct wait-for graph therefore has edges: T1→T3, T1→T4, T2→T3, T3→T4.\n\n(Flagged: in the source PDF the four answer choices were drawn as wait-for-graph diagrams, not text. The edge set below for option (c) is preserved correctly from the worked explanation; options (a), (b) and (d) are plausible edge-direction variants standing in for the un-transcribable diagrams, not exact copies of the original incorrect options.)\n\nWhich edge set below correctly represents the wait-for graph for the scenario above?",
-        options: [
-          "a) T1→T3, T4→T1, T2→T3, T4→T3",
-          "b) T3→T1, T1→T4, T3→T2, T3→T4",
-          "c) T1→T3, T1→T4, T2→T3, T3→T4",
-          "d) T1→T3, T1→T4, T3→T2, T4→T3",
-        ],
-        correctAnswers: ["c) T1→T3, T1→T4, T2→T3, T3→T4"],
+          "Suppose in a database, there are four transactions T1, T2, T3 and T4. Transaction T1 is waiting for transactions T3 and T4, transaction T2 is waiting for transaction T3, and transaction T3 is waiting for transaction T4 to release a data item.\n\nIdentify the correct wait-for graph for the above scenario (each option below is shown as a diagram, exactly as in the original assignment).",
+        options: ["Option a)", "Option b)", "Option c)", "Option d)"],
+        optionDiagramMap: {
+          "Option a)": "waitfor-a",
+          "Option b)": "waitfor-b",
+          "Option c)": "waitfor-c",
+          "Option d)": "waitfor-d",
+        },
+        correctAnswers: ["Option c)"],
         explanation:
-          "When Ti requests a data item held by Tj, the edge Ti → Tj is inserted in the wait-for graph. So T1→T3, T1→T4 (T1 waits for both T3 and T4), T2→T3 (T2 waits for T3), and T3→T4 (T3 waits for T4) correctly represent the given waiting relationships.",
+          "When Ti requests a data item held by Tj, the edge Ti → Tj is inserted in the wait-for graph. So T1→T3, T1→T4 (T1 waits for both T3 and T4), T2→T3 (T2 waits for T3), and T3→T4 (T3 waits for T4) correctly represent the given waiting relationships — that's exactly option (c). The other three options each have at least one edge pointing the wrong way (e.g. arrows into T1 or T3 instead of out of them), which would mean other transactions are waiting on T1/T3 rather than the other way around.",
         hinglishExplanation:
-          "Wait-for graph mein, jab Ti kisi data item ka wait kar raha ho jo Tj ke paas hai, hum edge Ti→Tj banate hain. Yahan T1, T3 aur T4 dono ka wait kar raha hai, T2, T3 ka wait kar raha hai, aur T3, T4 ka wait kar raha hai — in sabko sahi direction mein draw karne se sahi graph banta hai.",
+          "Wait-for graph mein, jab Ti kisi data item ka wait kar raha ho jo Tj ke paas hai, hum edge Ti→Tj banate hain (arrow Ti SE NIKAL kar Tj ki TARAF jaata hai). Yahan T1, T3 aur T4 dono ka wait kar raha hai (T1→T3, T1→T4), T2, T3 ka wait kar raha hai (T2→T3), aur T3, T4 ka wait kar raha hai (T3→T4) — yeh sab option (c) mein sahi diya gaya hai. Baaki teeno options mein kam se kam ek arrow ULTI DIRECTION mein hai (T1 ya T3 ki taraf aa raha hai, jaana chahiye tha unse bahar) — jo galat scenario represent karta hai.",
       },
       {
         id: "w7-q4",
@@ -1143,13 +1145,13 @@ const rawWeeks = [
         id: "w7-q10",
         type: "MCQ",
         question:
-          "Consider the following schedule S (reconstructed from the worked explanation below, since the source PDF rendered this as a table image), involving transactions T1, T2, T3, in this time order:\nT3: R(X)\nT2: W(X)\nT1: R(X)\nT2: W(X)\nT1: W(X)\nT1: W(Y)\n\nR(X) denotes read operation on data item X by Transaction Ti. W(X) denotes write operation on data item X by Transaction Ti.\n\nIdentify the possible number of view serializable schedules of the above schedule S.",
+          "Consider the following schedule S, involving transactions T1, T2, T3, in this time order:\nT3: R(X)\nT2: W(X)\nT1: R(X)\nT3: W(X)\nT1: W(X)\nT1: W(Y)\n\nR(X) denotes read operation on data item X by Transaction Ti. W(X) denotes write operation on data item X by Transaction Ti.\n\nIdentify the possible number of view serializable schedules of the above schedule S.",
         options: ["1", "2", "3", "4"],
         correctAnswers: ["1"],
         explanation:
-          "The final update on both X and Y is made by T1, so T1 must execute after T2 and T3: (T2, T3) → T1. The initial read of X is by T3, and T2 is the first transaction to update X after that read, giving T3 → T2. The write-read sequence (T2 writes X, then T1 reads X) gives T2 → T1. The only valid ordering is T3 → T2 → T1, so there is exactly 1 possible view serializable schedule.",
+          "The final update on both X and Y is made by T1, so T1 must execute after T2 and T3: (T2, T3) → T1. The initial read of X is by T3, so T3 must come before whichever transaction writes X first in the serial order — meaning T3 must actually be scheduled first overall. The write-read sequence (T2 writes X, then T1 reads X) gives T2 → T1: T1's read must come from T2's write specifically, so T2 must execute before T1. T3's own later write to X (step 4) is a 'blind write' that nobody reads, so it doesn't add any extra ordering constraint beyond T3 coming first. Combining all constraints, the only valid ordering is T3 → T2 → T1, so there is exactly 1 possible view serializable schedule.",
         hinglishExplanation:
-          "View serializability ke rules: (1) FINAL value likhne wala transaction sabse AAKHIR mein — T1 (X aur Y dono). (2) Initial read wale ke baad pehla write — T3→T2. (3) Write-read sequence — T2→T1. In sab ko combine karne se sirf EK valid ordering: T3→T2→T1.",
+          "View serializability ke rules: (1) FINAL value likhne wala transaction sabse AAKHIR mein — T1 (X aur Y dono ka final write T1 karta hai). (2) Initial read wala transaction (T3) SABSE PEHLE aana chahiye, kyunki usse pehle X pe koi write nahi hona chahiye. (3) T1 jo X padhta hai woh T2 ke likhe hue value se aata hai (T2→T1), isliye T2, T1 se pehle hona chahiye. T3 ka apna doosra write (step 4) sirf ek 'blind write' hai jise koi padhta nahi, isliye ismein koi extra restriction nahi lagti. In sab ko combine karne se sirf EK valid ordering: T3→T2→T1.",
       },
     ],
   },
@@ -1227,8 +1229,9 @@ const rawWeeks = [
       {
         id: "w8-q5",
         type: "MCQ",
+        diagram: "RecoveryTimeline",
         question:
-          "Consider the following state of transactions on a timeline that has two checkpoints (Checkpoint 1, Checkpoint 2) followed by a System Failure. (Flagged: this was originally a timeline diagram in the source PDF; the bar positions below are reconstructed from the worked explanation, since a diagram isn't transcribable as text.)\n\n- T1: starts and commits, both entirely before Checkpoint 1.\n- T2: starts before Checkpoint 1 and commits right at/around Checkpoint 1.\n- T3: starts after Checkpoint 1 and commits before Checkpoint 2.\n- T4: starts before Checkpoint 2 (spanning across it) and commits after Checkpoint 2, before the System Failure.\n- T5: starts before Checkpoint 2 (spanning across it) and is still running (uncommitted) at the System Failure.\n- T6: starts before Checkpoint 2 (spanning across it) and is still running (uncommitted) at the System Failure.\n\nConsider the following statements:\n1. T1, T2 and T3 can be ignored.\n2. T2 and T4 can be ignored.\n3. T5, and T6 need to be redone.\n4. T5 and T6 need to be undone.\n5. Only T4 needs to be redone.\n\nIdentify the correct group of statements from the options below.",
+          "Consider the following state of transactions on the timeline shown above, with two checkpoints (Checkpoint 1, Checkpoint 2) followed by a System Failure.\n\nConsider the following statements:\n1. T1, T2 and T3 can be ignored.\n2. T2 and T4 can be ignored.\n3. T5, and T6 need to be redone.\n4. T5 and T6 need to be undone.\n5. Only T4 needs to be redone.\n\nIdentify the correct group of statements from the options below.",
         options: ["1), 2), 3), 5)", "1), 3), 4), 5)", "1), 4), 5)", "1), 2), 5)"],
         correctAnswers: ["1), 4), 5)"],
         explanation:
@@ -1239,8 +1242,9 @@ const rawWeeks = [
       {
         id: "w8-q6",
         type: "MCQ",
+        diagram: "QueryTreesW8Q6",
         question:
-          "Consider the following relational schema:\nVehicle(vehicle_id, vehicle_name, model, owner_id)\nService_Record(service_id, vehicle_id, service_date, service_cost)\nOwner(owner_id, owner_name, address, phone)\n\nTwo query trees are given below, both ultimately computing Π(vehicle_name, owner_name) over a join of all three relations. (Flagged: the source PDF drew these as query-tree diagrams; the indented text below reconstructs the same tree structure.)\n\nFigure 1 — selection is applied AFTER both joins are done:\nΠ(vehicle_name, owner_name)\n  of  σ(service_cost > 5000)\n        of  [ (Vehicle ⋈ Service_Record) ⋈ Owner ]\n\nFigure 2 — selection is pushed down and applied directly on Service_Record, BEFORE the join:\nΠ(vehicle_name, owner_name)\n  of  [ (Vehicle ⋈ σ(service_cost > 5000)(Service_Record)) ⋈ Owner ]\n\nIdentify the correct statement for the above two query trees.",
+          "Consider the following relational schema:\nVehicle(vehicle_id, vehicle_name, model, owner_id)\nService_Record(service_id, vehicle_id, service_date, service_cost)\nOwner(owner_id, owner_name, address, phone)\n\nTwo query trees are given above, both ultimately computing Π(vehicle_name, owner_name) over a join of all three relations. In Figure 1 the selection (service_cost > 5000) is applied AFTER both joins; in Figure 2 that same selection is pushed down and applied directly on Service_Record, BEFORE the join.\n\nIdentify the correct statement for the above two query trees.",
         options: [
           "Two query trees are equivalent and the query tree of Figure 1 will lead to more efficient query processing.",
           "Two query trees are equivalent and the query tree of Figure 2 will lead to more efficient query processing.",

@@ -1,6 +1,7 @@
 import { Check, X, ArrowLeft } from "lucide-react";
 import { useNav } from "../context/NavContext.jsx";
 import FormattedText from "./FormattedText.jsx";
+import DiagramRenderer, { OptionDiagram } from "./DiagramRenderer.jsx";
 
 export default function ReviewAnswers({ attempt, session }) {
   const { navigate } = useNav();
@@ -51,6 +52,7 @@ export default function ReviewAnswers({ attempt, session }) {
                   )}
                 </span>
               </div>
+              <DiagramRenderer diagram={q.diagram} />
               <FormattedText
                 text={q.question}
                 className="text-sm text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]"
@@ -72,21 +74,36 @@ export default function ReviewAnswers({ attempt, session }) {
                     cls = "border-[var(--color-wrong)] bg-[var(--color-wrong-soft)] text-[var(--color-ink)]";
                     tableBg = "bg-black/[0.06]";
                   }
+                  const optionDiagramKey = q.optionDiagramMap?.[opt];
                   return (
                     <div key={opt} className={`rounded-md border px-3 py-1.5 text-sm ${cls}`}>
-                      <FormattedText text={opt} tableClassName={`${tableBg} px-1.5 py-1`} />
+                      {optionDiagramKey ? (
+                        <div>
+                          <p className="text-sm font-medium">{opt}</p>
+                          <OptionDiagram diagramKey={optionDiagramKey} />
+                        </div>
+                      ) : (
+                        <FormattedText text={opt} tableClassName={`${tableBg} px-1.5 py-1`} />
+                      )}
                       {isSel && <span className="ml-1.5 text-xs opacity-60">(your answer)</span>}
                     </div>
                   );
                 })}
               </div>
               {q.explanation && (
-                <p className="mt-2 rule-top pt-2 text-xs text-[var(--color-ink-soft)] dark:text-white/50">
-                  <span className="font-medium text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
-                    Explanation:{" "}
-                  </span>
-                  <span className="whitespace-pre-wrap">{q.explanation}</span>
-                </p>
+                <div className="mt-2 rule-top pt-2 text-xs text-[var(--color-ink-soft)] dark:text-white/50">
+                  <p>
+                    <span className="font-medium text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
+                      Explanation:{" "}
+                    </span>
+                    <span className="whitespace-pre-wrap">{q.explanation}</span>
+                  </p>
+                  {q.explanationDiagram && (
+                    <div className="mt-1 text-[var(--color-ink)] dark:text-[var(--color-paper-dark)]">
+                      <DiagramRenderer diagram={q.explanationDiagram} />
+                    </div>
+                  )}
+                </div>
               )}
               {q.hinglishExplanation && (
                 <p className="mt-2 rule-top pt-2 text-xs text-[var(--color-ink-soft)] dark:text-white/50">

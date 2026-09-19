@@ -7,6 +7,12 @@ All 8 weeks contain your real DBMS Assignment 1–8 questions (80 total), transc
 
 A few notes on the transcription are documented at the top of `src/data/questions.js`, including spots where the source PDF used diagrams/table-images instead of plain text (Week 7 Q3 & Q10, Week 8 Q5 & Q6) — I've flagged exactly what was reconstructed there.
 
+## Diagrams
+Questions whose original assignment included an actual diagram (ER diagrams, 2-3-4 trees, wait-for graphs, the Week 8 recovery timeline, and the query-optimization trees) now render a real inline SVG diagram, reconstructed pixel-by-pixel against the source PDF images — not just described in text. These live in `src/components/diagrams/Diagrams.jsx` and are wired to questions via three optional fields in `questions.js`:
+- `diagram`: renders above the question text (the diagram is needed to answer)
+- `explanationDiagram`: renders only after checking the answer (the source PDF only revealed it in the worked explanation — showing it earlier would give the answer away)
+- `optionDiagramMap`: renders a small diagram inside a specific answer option instead of plain text (used for Week 7 Q3, where the four options are themselves wait-for-graph diagrams)
+
 ## Running it
 
 ```bash
